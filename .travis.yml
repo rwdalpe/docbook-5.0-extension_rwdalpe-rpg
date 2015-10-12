@@ -1,0 +1,17 @@
+language: java
+jdk:
+  - oraclejdk8
+script: ant dist
+deploy:
+  provider: releases
+  api_key:
+    secure: "HSfA+W3C+yvTv4XPCSyJaA3LTBbXloRP5E6Cjgt8kEAql1m+Q5+GgWDO4Cc8guAt2hCqWTQ5cgg7oqx87Sh5V0Iw8hfyB5JstE7HeFyKLYBloYhLiUhIs0Gh8X0eI5Ht/DNQdx4KmzxdHU3snqSRHq8VOIZmtDFdcmBpUJy6aoqxjO4czwnHOTRlvBndrwxFTxyy1x0fIrCezwluJvRidHLzIEc7PfuneJPvteb0dWI4DrxFhmIiwJUdDAG881J91Rqwhe4RJrQ9/ojrArZNUnj3nOXzMOhNt3W67RtnP8noonuKHNV4ZqLtf79bskOx95TW7ItpbTQ64XgY0IZu8mBuYrc1jY4cltvdkODHITh+vgFwdtuRxbGvyCEcdqhutrEg3ToFj5am1hfLxTy/4uz/9SSZGXovSdEFTYk4vSBknDpEx6ldr6cHwIUnbzQApQ4iArD6U9yASEQ8raJCm9xcExEPjKBQnQqmoLJcJBHAl5DjVf6iQXOnXenr2HEzT8befi2WNerNENwFZkJ+50/WVfhoBH60zIeYq6iASBUiVoeiPT7oh3bF5itaIA52JiL6SeZRe8mI7c+2JIM+9SlsTg0/27CD5oRvY57uWiS/I0T2OKqlUgLyRg/JOOuRjGc43qRibViFQiaL19+HKOkI5d1ZMmwmN5Hp7oiljB8="
+  skip_cleanup: true
+  file_glob: true
+  file:
+    - dist/*.zip
+  on:
+    tags: true
+notifications:
+  email:
+  - rwdalpe@gmail.com
