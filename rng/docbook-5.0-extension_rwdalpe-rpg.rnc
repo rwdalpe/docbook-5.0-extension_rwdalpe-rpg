@@ -1,0 +1,262 @@
+# Copyright (C) 2015 Robert Winslow Dalpe
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+# 
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+namespace db = "http://docbook.org/ns/docbook"
+namespace rpg = "http://docbook.org/ns/docbook"
+default namespace = "http://docbook.org/ns/docbook"
+
+include "docbookxi.rnc"
+
+rpg.general.location.role.attribute = attribute role { text }
+rpg.general.location.attlist =
+    rpg.general.location.role.attribute ?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.general.location =
+    element location {
+        rpg.general.location.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+
+rpg.pathfinder.attribute.role.attribute = attribute role { text }
+rpg.pathfinder.attribute.score.attribute = attribute score { text }
+rpg.pathfinder.attribute.modifier.attribute = attribute modifier { text }
+rpg.pathfinder.attribute.attlist =
+    rpg.pathfinder.attribute.role.attribute?
+    & rpg.pathfinder.attribute.score.attribute?
+    & rpg.pathfinder.attribute.modifier.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.attribute =
+    element attribute {
+        rpg.pathfinder.attribute.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+rpg.pathfinder.attributes.role.attribute = attribute role { text }
+rpg.pathfinder.attributes.attlist =
+    rpg.pathfinder.attributes.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.attributes =
+    element attributes {
+        rpg.pathfinder.attributes.attlist,
+        rpg.pathfinder.attribute+
+    }
+    
+rpg.pathfinder.alignment.role.attribute = attribute role { text }
+rpg.pathfinder.alignment.attlist =
+    rpg.pathfinder.alignment.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.alignment =
+    element alignment {
+        rpg.pathfinder.alignment.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+
+rpg.pathfinder.marketplace.role.attribute = attribute role { text }
+rpg.pathfinder.marketplace.base.attribute = attribute base { text }
+rpg.pathfinder.marketplace.limit.attribute = attribute limit { text }
+rpg.pathfinder.marketplace.casting.attribute = attribute casting { text }
+rpg.pathfinder.marketplace.minor.attribute = attribute minor { text }
+rpg.pathfinder.marketplace.medium.attribute = attribute medium { text }
+rpg.pathfinder.marketplace.major.attribute = attribute major { text }
+rpg.pathfinder.marketplace.attlist =
+    rpg.pathfinder.marketplace.role.attribute?
+    & rpg.pathfinder.marketplace.base.attribute?
+    & rpg.pathfinder.marketplace.limit.attribute?
+    & rpg.pathfinder.marketplace.casting.attribute?
+    & rpg.pathfinder.marketplace.minor.attribute?
+    & rpg.pathfinder.marketplace.medium.attribute?
+    & rpg.pathfinder.marketplace.major.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.marketplace =
+    element marketplace {
+        rpg.pathfinder.marketplace.attlist
+    }
+
+rpg.pathfinder.population.role.attribute = attribute role { text }
+rpg.pathfinder.population.count.attribute = attribute count { text }
+rpg.pathfinder.population.attlist =
+    rpg.pathfinder.population.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.population =
+    element population {
+        rpg.pathfinder.population.attlist,
+        (
+            (rpg.pathfinder.population.count.attribute, 
+             db._text*,
+             db.indexing.inlines*,
+             db.link.inlines*)
+            | (rpg.pathfinder.population.count.attribute?, 
+               (db._text
+               | db.indexing.inlines
+               | db.link.inlines)+)
+        )
+    }
+rpg.pathfinder.populations.role.attribute = attribute role { text }
+rpg.pathfinder.populations.total.attribute = attribute total { text }
+rpg.pathfinder.populations.attlist =
+    rpg.pathfinder.populations.role.attribute?
+    & rpg.pathfinder.populations.total.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.populations =
+    element populations {
+        rpg.pathfinder.populations.attlist,
+        rpg.pathfinder.population+
+    }
+rpg.pathfinder.government.role.attribute = attribute role { text }
+rpg.pathfinder.government.attlist =
+    rpg.pathfinder.government.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.government =
+    element government {
+        rpg.pathfinder.demographics.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+rpg.pathfinder.demographics.role.attribute = attribute role { text }
+rpg.pathfinder.demographics.attlist =
+    rpg.pathfinder.demographics.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.demographics =
+    element demographics {
+        rpg.pathfinder.demographics.attlist,
+        rpg.pathfinder.government,
+        rpg.pathfinder.populations
+    }
+rpg.pathfinder.settlementdisadvantage.role.attribute = attribute role { text }
+rpg.pathfinder.settlementdisadvantage.attlist =
+    rpg.pathfinder.settlementdisadvantage.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementdisadvantage =
+    element settlementdisadvantage {
+        rpg.pathfinder.settlementdisadvantage.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+rpg.pathfinder.settlementdisadvantages.role.attribute = attribute role { text }
+rpg.pathfinder.settlementdisadvantages.attlist =
+    rpg.pathfinder.settlementdisadvantages.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementdisadvantages =
+    element settlementdisadvantages {
+        rpg.pathfinder.settlementdisadvantages.attlist,
+        rpg.pathfinder.settlementdisadvantage+
+    }
+rpg.pathfinder.settlementdanger.role.attribute = attribute role { text }
+rpg.pathfinder.settlementdanger.modifier.attribute = attribute modifier { text }
+rpg.pathfinder.settlementdanger.attlist =
+    rpg.pathfinder.settlementdanger.role.attribute?
+    & rpg.pathfinder.settlementdanger.modifier.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementdanger =
+    element settlementdanger {
+        rpg.pathfinder.settlementdanger.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+rpg.pathfinder.settlementquality.role.attribute = attribute role { text }
+rpg.pathfinder.settlementquality.attlist =
+    rpg.pathfinder.settlementquality.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementquality =
+    element settlementquality {
+        rpg.pathfinder.settlementquality.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }
+rpg.pathfinder.settlementqualities.role.attribute = attribute role { text }
+rpg.pathfinder.settlementqualities.attlist =
+    rpg.pathfinder.settlementquality.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementqualities =
+    element settlementqualities {
+        rpg.pathfinder.settlementquality.attlist,
+        rpg.pathfinder.settlementquality+
+    }   
+rpg.pathfinder.settlementtype.role.attribute = attribute role { text }
+rpg.pathfinder.settlementtype.attlist =
+    rpg.pathfinder.settlementtype.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlementtype =
+    element settlementtype {
+        rpg.pathfinder.settlementtype.attlist,
+        db._text*,
+        db.indexing.inlines*,
+        db.link.inlines*
+    }   
+rpg.pathfinder.settlement.role.attribute = attribute role { text }
+rpg.pathfinder.settlement.attlist =
+    rpg.pathfinder.settlement.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.settlement =
+    element settlement {
+        rpg.pathfinder.settlement.attlist,
+        rpg.general.location,
+        rpg.pathfinder.alignment,
+        rpg.pathfinder.settlementtype,
+        rpg.pathfinder.attributes,
+        rpg.pathfinder.settlementqualities,
+        rpg.pathfinder.settlementdanger,
+        rpg.pathfinder.settlementdisadvantages?,
+        rpg.pathfinder.demographics,
+        rpg.pathfinder.marketplace
+    }
+
+rpg.general.inlines = rpg.general.location
+
+rpg.pathfinder.general.inlines = rpg.pathfinder.alignment 
+    | rpg.pathfinder.attribute
+rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
+    | rpg.pathfinder.settlementquality 
+    | rpg.pathfinder.settlementdanger 
+    | rpg.pathfinder.settlementdisadvantage 
+    | rpg.pathfinder.government
+    | rpg.pathfinder.population
+rpg.pathfinder.inlines = rpg.pathfinder.general.inlines 
+    | rpg.pathfinder.settlement.inlines
+
+rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
+rpg.pathfinder.blocks = rpg.pathfinder.settlement.blocks 
+    | rpg.pathfinder.attributes
+
+rpg.inlines = rpg.general.inlines | rpg.pathfinder.inlines
+rpg.blocks = rpg.pathfinder.blocks
+
+db.nopara.blocks |= rpg.blocks
+db.all.inlines |= rpg.inlines

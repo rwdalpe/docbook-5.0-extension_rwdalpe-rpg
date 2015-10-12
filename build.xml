@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<!--
+
+Copyright (C) 2015 Robert Winslow Dalpe
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<project name="docbook-5.0-extension_rwdalpe-rpg" basedir=".">
+  <!-- BEGIN PROPERTY DEFINITIONS -->
+
+  <property file="build.properties" />
+
+  <!-- END PROPERTY DEFINITIONS -->
+
+
+
+  <!-- BEGIN ADDITIONAL LIBRARIES AND CLASSPATH DEFINITIONS -->
+  <path id="trang.classpath">
+    <fileset dir="${lib}/${lib.trang}/bin/">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+  <!-- END ADDITIONAL LIBRARIES AND CLASSPATH DEFINITIONS -->
+
+
+
+  <!-- BEGIN PUBLIC TARGETS -->
+
+  <target name="dist" depends="build,zip" description="Build and package the extension" />
+
+  <target name="build" depends="clean,getlibs" description="Build the extension">
+    <mkdir dir="${outputdir}" />
+
+    <copy todir="${outputdir}">
+      <fileset dir=".">
+        <include name="rng/**" />
+        <include name="README.*" />
+        <include name="*.txt" />
+      </fileset>
+    </copy>
+
+    <java fork="true" failonerror="true" jar="${lib}/${lib.trang}/trang.jar">
+      <arg value="-I" />
+      <arg value="rnc" />
+      <arg value="-O" />
+      <arg value="rng" />
+      <arg value="${outputdir}/rng/${ant.project.name}.rnc" />
+      <arg value="${outputdir}/rng/${ant.project.name}.rng" />
+    </java>
+  </target>
+
+  <target name="zip" depends="-check.zip" description="Package whatever is in the output directory into a zip" if="output.available">
+    <zip destfile="${outputdir}/${ant.project.name}_${version}.zip" basedir="${outputdir}" />
+  </target>
+
+  <target name="clean" description="Remove all output and build artifacts">
+    <delete dir="${outputdir}" />
+  </target>
+
+  <target name="cleanlibs" description="Remove all lib files that can be safely re-downloaded">
+    <delete dir="${lib}/${lib.trang}" />
+    <delete file="${lib}/${lib.trang.zip}" />
+    <delete file="rng/${lib.docbook.rnc}" />
+  </target>
+
+  <target name="getlibs" description="Retrieve all necessary lib files for building">
+    <mkdir dir="${lib}" />
+    <get dest="${lib}/" src="${lib.trang.url}" skipexisting="true" />
+    <unzip dest="${lib}/" src="${lib}/${lib.trang.zip}" overwrite="false" />
+    <get dest="rng/" src="${lib.docbook.rnc.url}" skipexisting="true" />
+  </target>
+
+  <!-- END PUBLIC TARGETS -->
+
+
+
+  <!-- BEGIN PRIVATE TARGETS -->
+
+  <target name="-check.zip">
+    <available file="${outputdir}" property="output.available" />
+  </target>
+
+  <!-- END PRIVATE TARGETS -->
+</project>
