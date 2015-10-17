@@ -49,7 +49,7 @@ task getLibs(dependsOn: copyLibs) {
   doFirst {
     ant.get(dest: "${lib}", src: "${libTrangUrl}", skipexisting: true)
     ant.unzip(dest: "${lib}", src: "${lib}/${libTrangZip}", overwrite: false)
-    ant.get(dest: "rng/", src: "${libDocbookRncUrl}", skipexisting: true)
+    //ant.get(dest: "rng/", src: "${libDocbookRncUrl}", skipexisting: true)
   }
 }
 

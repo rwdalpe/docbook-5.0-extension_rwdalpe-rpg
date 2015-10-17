@@ -2,6 +2,5 @@ dist/
 lib/trang*
 lib/gradle
 .project
-rng/docbookxi.rnc
 .gradle
 .externalToolBuilders
