@@ -42,59 +42,59 @@
 					documentation
 				</title>
 				<style>
-				  <![CDATA[
-					  nav#toc {
-					    background-color: white;
-					    font-size: .75em;
-					    position: fixed;
-					    top: 0px;
-					    left: 0px;
-					    height: 100%;
-					    width: 30em;
-					    overflow-x: scroll;
-					    overflow-y: scroll;
-					    margin: 0px;
-					  }
-					  nav#toc ul {
-					    list-style-type:none;
-					    margin: 0px;
-					    padding: .5em;
-					  }
-					  body {
-					    margin-left: 24em;
-					  }
-					  section.define {
-					    border-top: 1px solid black;
-					  }
-					  section.define:last-of-type {
-              border-bottom: 1px solid black;
-            }
-					  section section {
-					    margin-left: 2em;
-					  }
-					  @media screen and (max-width:30em)
-	          {
-					    nav#toc {
-					      width: 100%;
-					      height: 13em;
-					    }
-					    body {
-					      margin: 0px;
-					      margin-top: 10em;
-					      word-wrap: break-word;
-					    }
-					    pre {
-					     word-wrap: break-word;
-					    }
-					    
-              section section {
-                margin-left: .5em;
-              }
-              section section ul {
-                padding-left: .75em;
-              }
-					  }
-				  ]]>
+					<![CDATA[
+						nav#toc {
+							background-color: white;
+							font-size: .75em;
+							position: fixed;
+							top: 0px;
+							left: 0px;
+							height: 100%;
+							width: 30em;
+							overflow-x: scroll;
+							overflow-y: scroll;
+							margin: 0px;
+						}
+						nav#toc ul {
+							list-style-type:none;
+							margin: 0px;
+							padding: .5em;
+						}
+						body {
+							margin-left: 24em;
+						}
+						section.define {
+							border-top: 1px solid black;
+						}
+						section.define:last-of-type {
+							border-bottom: 1px solid black;
+						}
+						section section {
+							margin-left: 2em;
+						}
+						@media screen and (max-width:30em)
+						{
+							nav#toc {
+								width: 100%;
+								height: 13em;
+							}
+							body {
+								margin: 0px;
+								margin-top: 10em;
+								word-wrap: break-word;
+							}
+							pre {
+								word-wrap: break-word;
+							}
+							
+							section section {
+								margin-left: .5em;
+							}
+							section section ul {
+								padding-left: .75em;
+							}
+						}
+					]]>
 				</style>
 			</head>
 			<body>
@@ -109,9 +109,8 @@
 				<aside>
 					<p>
 						These are schema extensions for DocBook 5.0 that provider a
-						grammar for
-						marking up concepts present in various table-top role-playing games
-						(TTRPGs).
+						grammar for marking up concepts present in various table-top
+						role-playing games (TTRPGs).
 					</p>
 					<p>
 						See project details at
@@ -123,26 +122,19 @@
 					</p>
 					<p>
 						This program is free software: you can redistribute it and/or
-						modify
-						it under the terms of the GNU Affero General Public License
-						as
-						published
-						by the Free Software Foundation, either version 3 of
-						the License, or
-						(at your option) any later version.
+						modify it under the terms of the GNU Affero General Public License
+						as published by the Free Software Foundation, either version 3 of
+						the License, or (at your option) any later version.
 					</p>
 					<p>
 						This program is distributed in the hope that it will be useful,
-						but
-						WITHOUT ANY WARRANTY; without even the implied warranty of
-						MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-						GNU
+						but WITHOUT ANY WARRANTY; without even the implied warranty of
+						MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
 						Affero General Public License for more details.
 					</p>
 					<p>
 						You should have received a copy of the GNU Affero General Public
-						License
-						along with this program. If not, see
+						License along with this program. If not, see
 						<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
 						.
 					</p>
