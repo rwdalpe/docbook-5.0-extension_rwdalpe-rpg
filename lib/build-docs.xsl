@@ -44,6 +44,7 @@
 				<style>
 				  <![CDATA[
 					  nav#toc {
+					    background-color: white;
 					    font-size: .75em;
 					    position: fixed;
 					    top: 0px;
@@ -80,7 +81,18 @@
 					    body {
 					      margin: 0px;
 					      margin-top: 10em;
+					      word-wrap: break-word;
 					    }
+					    pre {
+					     word-wrap: break-word;
+					    }
+					    
+              section section {
+                margin-left: .5em;
+              }
+              section section ul {
+                padding-left: .75em;
+              }
 					  }
 				  ]]>
 				</style>
@@ -94,6 +106,47 @@
 					<xsl:value-of select="$version" />
 					documentation
 				</h1>
+				<aside>
+					<p>
+						These are schema extensions for DocBook 5.0 that provider a
+						grammar for
+						marking up concepts present in various table-top role-playing games
+						(TTRPGs).
+					</p>
+					<p>
+						See project details at
+						<a href="https://github.com/rwdalpe/docbook-5.0-extension_rwdalpe-rpg">https://github.com/rwdalpe/docbook-5.0-extension_rwdalpe-rpg
+						</a>
+					</p>
+					<p>
+						Copyright (C) 2015 Robert Winslow Dalpe
+					</p>
+					<p>
+						This program is free software: you can redistribute it and/or
+						modify
+						it under the terms of the GNU Affero General Public License
+						as
+						published
+						by the Free Software Foundation, either version 3 of
+						the License, or
+						(at your option) any later version.
+					</p>
+					<p>
+						This program is distributed in the hope that it will be useful,
+						but
+						WITHOUT ANY WARRANTY; without even the implied warranty of
+						MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+						GNU
+						Affero General Public License for more details.
+					</p>
+					<p>
+						You should have received a copy of the GNU Affero General Public
+						License
+						along with this program. If not, see
+						<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
+						.
+					</p>
+				</aside>
 				<xsl:apply-templates />
 			</body>
 		</html>
@@ -126,9 +179,9 @@
 			<aside>
 				<p>
 					Schema identifier:
-					<pre>
+					<span style="font-family: monospace;">
 						<xsl:value-of select="@name" />
-					</pre>
+					</span>
 				</p>
 			</aside>
 

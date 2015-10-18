@@ -93,7 +93,7 @@ task docs(dependsOn: build) {
       javaexec {
         main = 'net.sf.saxon.Transform'
         classpath = jars
-        args = "-xsl:${lib}/build-docs.xsl -s:${transform} -o:${outputdir}/${baseFileName}.html".split().toList()
+        args = "-xsl:${lib}/build-docs.xsl -s:${transform} -o:${outputdir}/${baseFileName}.html version=${project.version}".split().toList()
       }
     }
   }
