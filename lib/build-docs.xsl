@@ -41,19 +41,67 @@
 					<xsl:value-of select="$version" />
 					documentation
 				</title>
+				<style>
+				  <![CDATA[
+					  nav#toc {
+					    font-size: .75em;
+					    position: fixed;
+					    top: 0px;
+					    left: 0px;
+					    height: 100%;
+					    width: 30em;
+					    overflow-x: scroll;
+					    overflow-y: scroll;
+					    margin: 0px;
+					  }
+					  nav#toc ul {
+					    list-style-type:none;
+					    margin: 0px;
+					    padding: .5em;
+					  }
+					  body {
+					    margin-left: 24em;
+					  }
+					  section.define {
+					    border-top: 1px solid black;
+					  }
+					  section.define:last-of-type {
+              border-bottom: 1px solid black;
+            }
+					  section section {
+					    margin-left: 2em;
+					  }
+					  @media screen and (max-width:30em)
+	          {
+					    nav#toc {
+					      width: 100%;
+					      height: 13em;
+					    }
+					    body {
+					      margin: 0px;
+					      margin-top: 10em;
+					    }
+					  }
+				  ]]>
+				</style>
 			</head>
 			<body>
-				<nav>
+				<nav id="toc">
 					<xsl:call-template name="toc" />
 				</nav>
+				<h1>
+					docbook-5.0-extension_rwdalpe-rpg version
+					<xsl:value-of select="$version" />
+					documentation
+				</h1>
 				<xsl:apply-templates />
 			</body>
 		</html>
 	</xsl:template>
 
 	<xsl:template match="rng:define[not(starts-with(@name, 'db.'))]">
-		<section>
-			<h1 id="{@name}">
+		<section class="define">
+			<h2 id="{@name}">
 				<xsl:choose>
 					<xsl:when test="./rng:element">
 						Element
@@ -74,8 +122,7 @@
 						</span>
 					</xsl:otherwise>
 				</xsl:choose>
-
-			</h1>
+			</h2>
 			<aside>
 				<p>
 					Schema identifier:
@@ -84,20 +131,35 @@
 					</pre>
 				</p>
 			</aside>
+
 			<xsl:if test="a:documentation">
-				<h2>Documentation</h2>
-				<xsl:for-each select="tokenize(a:documentation/text(),'&#xA;&#xA;')">
-					<p>
-						<xsl:value-of select="normalize-space(.)" />
-					</p>
-				</xsl:for-each>
+				<section class="docs">
+					<h3>Documentation</h3>
+					<xsl:for-each select="tokenize(a:documentation/text(),'&#xA;&#xA;')">
+						<p>
+							<xsl:value-of select="normalize-space(.)" />
+						</p>
+					</xsl:for-each>
+				</section>
 			</xsl:if>
 			<xsl:call-template name="linksToParents" />
 			<xsl:call-template name="linksToChildren" />
 		</section>
 	</xsl:template>
 
-	<xsl:template name="toc" />
+	<xsl:template name="toc">
+		<h2>Contents</h2>
+		<ul>
+			<xsl:for-each
+				select="/rng:grammar/rng:define[not(starts-with(@name, 'db.'))]">
+				<li>
+					<a href="#{@name}">
+						<xsl:value-of select="@name" />
+					</a>
+				</li>
+			</xsl:for-each>
+		</ul>
+	</xsl:template>
 
 	<xsl:template name="linksToParents">
 		<xsl:variable
@@ -110,24 +172,26 @@
 			select="//rng:define[.//rng:ref[@name = $name]]" />
 
 		<xsl:if test="$parents">
-			<h2>Parents</h2>
+			<section class="parents">
+				<h3>Parents</h3>
 
-			<ul>
-				<xsl:for-each select="$parents">
-					<li>
-						<xsl:choose>
-							<xsl:when test="not(starts-with(@name, 'db.'))">
-								<a href="#{@name}">
+				<ul>
+					<xsl:for-each select="$parents">
+						<li>
+							<xsl:choose>
+								<xsl:when test="not(starts-with(@name, 'db.'))">
+									<a href="#{@name}">
+										<xsl:value-of select="@name" />
+									</a>
+								</xsl:when>
+								<xsl:otherwise>
 									<xsl:value-of select="@name" />
-								</a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="@name" />
-							</xsl:otherwise>
-						</xsl:choose>
-					</li>
-				</xsl:for-each>
-			</ul>
+								</xsl:otherwise>
+							</xsl:choose>
+						</li>
+					</xsl:for-each>
+				</ul>
+			</section>
 		</xsl:if>
 	</xsl:template>
 
@@ -142,10 +206,12 @@
 
 
 		<xsl:if test="$hasChildren">
-			<h2>Children</h2>
-			<ul>
-				<xsl:apply-templates mode="children" />
-			</ul>
+			<section class="children">
+				<h3>Children</h3>
+				<ul>
+					<xsl:apply-templates mode="children" />
+				</ul>
+			</section>
 		</xsl:if>
 	</xsl:template>
 
@@ -184,7 +250,7 @@
 				<xsl:otherwise />
 			</xsl:choose>
 			<xsl:if
-				test="(position() != last() and not(parent::rng:choice)) or ((count(../preceding-sibling::rng:*)+1) != count(../../rng:*))">
+				test="((count(preceding-sibling::rng:*)+1) != count(../rng:*) and not(parent::rng:choice)) or (not(parent::rng:define) and (count(../preceding-sibling::rng:*)+1) != count(../../rng:*))">
 				,
 			</xsl:if>
 		</li>
