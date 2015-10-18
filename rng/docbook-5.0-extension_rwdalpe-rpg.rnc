@@ -15,9 +15,14 @@
 
 namespace db = "http://docbook.org/ns/docbook"
 namespace rpg = "http://docbook.org/ns/docbook"
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
 default namespace = "http://docbook.org/ns/docbook"
 
 include "docbookxi.rnc"
+
+a:documentation [ """When you see a *.role.attribute definition, consider it a
+declaration of a DocBook role attribute for that element, as that is what it
+should be processed as.""" ]
 
 rpg.general.location.role.attribute = attribute role { text }
 rpg.general.location.attlist =

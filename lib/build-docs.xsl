@@ -139,6 +139,15 @@
 						.
 					</p>
 				</aside>
+				<section id="general">
+					<h2>General Documentation</h2>
+					<xsl:for-each
+						select="tokenize(/rng:grammar/a:documentation/text(),'&#xA;&#xA;')">
+						<p>
+							<xsl:value-of select="normalize-space(.)" />
+						</p>
+					</xsl:for-each>
+				</section>
 				<xsl:apply-templates />
 			</body>
 		</html>
@@ -195,6 +204,9 @@
 	<xsl:template name="toc">
 		<h2>Contents</h2>
 		<ul>
+			<li>
+				<a href="#general">General Documentation</a>
+			</li>
 			<xsl:for-each
 				select="/rng:grammar/rng:define[not(starts-with(@name, 'db.'))]">
 				<li>
