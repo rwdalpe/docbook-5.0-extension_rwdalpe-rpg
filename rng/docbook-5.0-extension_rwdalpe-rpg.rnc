@@ -32,9 +32,9 @@ rpg.general.location.attlist =
 rpg.general.location =
     element location {
         rpg.general.location.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 
 rpg.pathfinder.attribute.role.attribute = attribute role { text }
@@ -49,9 +49,9 @@ rpg.pathfinder.attribute.attlist =
 rpg.pathfinder.attribute =
     element attribute {
         rpg.pathfinder.attribute.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 rpg.pathfinder.attributes.role.attribute = attribute role { text }
 rpg.pathfinder.attributes.attlist =
@@ -72,9 +72,9 @@ rpg.pathfinder.alignment.attlist =
 rpg.pathfinder.alignment =
     element alignment {
         rpg.pathfinder.alignment.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
@@ -110,9 +110,9 @@ rpg.pathfinder.population =
         rpg.pathfinder.population.attlist,
         (
             (rpg.pathfinder.population.count.attribute, 
-             db._text*,
-             db.indexing.inlines*,
-             db.link.inlines*)
+             (db._text 
+              | db.indexing.inlines
+              | db.link.inlines)*)
             | (rpg.pathfinder.population.count.attribute?, 
                (db._text
                | db.indexing.inlines
@@ -139,9 +139,9 @@ rpg.pathfinder.government.attlist =
 rpg.pathfinder.government =
     element government {
         rpg.pathfinder.demographics.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 rpg.pathfinder.demographics.role.attribute = attribute role { text }
 rpg.pathfinder.demographics.attlist =
@@ -162,9 +162,9 @@ rpg.pathfinder.settlementdisadvantage.attlist =
 rpg.pathfinder.settlementdisadvantage =
     element settlementdisadvantage {
         rpg.pathfinder.settlementdisadvantage.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 rpg.pathfinder.settlementdisadvantages.role.attribute = attribute role { text }
 rpg.pathfinder.settlementdisadvantages.attlist =
@@ -186,9 +186,9 @@ rpg.pathfinder.settlementdanger.attlist =
 rpg.pathfinder.settlementdanger =
     element settlementdanger {
         rpg.pathfinder.settlementdanger.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 rpg.pathfinder.settlementquality.role.attribute = attribute role { text }
 rpg.pathfinder.settlementquality.attlist =
@@ -198,9 +198,9 @@ rpg.pathfinder.settlementquality.attlist =
 rpg.pathfinder.settlementquality =
     element settlementquality {
         rpg.pathfinder.settlementquality.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }
 rpg.pathfinder.settlementqualities.role.attribute = attribute role { text }
 rpg.pathfinder.settlementqualities.attlist =
@@ -220,9 +220,9 @@ rpg.pathfinder.settlementtype.attlist =
 rpg.pathfinder.settlementtype =
     element settlementtype {
         rpg.pathfinder.settlementtype.attlist,
-        db._text*,
-        db.indexing.inlines*,
-        db.link.inlines*
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
     }   
 rpg.pathfinder.settlement.role.attribute = attribute role { text }
 rpg.pathfinder.settlement.attlist =
