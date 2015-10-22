@@ -70,6 +70,7 @@ rpg.d20.abilityscores.attlist =
     rpg.d20.abilityscores.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## A collection of ability scores for some entity.
 rpg.d20.abilityscores =
     element abilityscores {
         rpg.d20.abilityscores.attlist,
@@ -81,6 +82,14 @@ rpg.d20.alignment.attlist =
     rpg.d20.alignment.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A d20 alignment, as described at "
+    h:a[ href="http://www.d20srd.org/srd/description.htm#alignment"
+    "http://www.d20srd.org/srd/description.htm#alignment"]
+    "."
+  ]
+]
 rpg.d20.alignment =
     element alignment {
         rpg.d20.alignment.attlist,
@@ -90,11 +99,59 @@ rpg.d20.alignment =
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
+[
+  a:documentation [
+    "The base value for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#base-value-and-purchase-limit"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#base-value-and-purchase-limit"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.base.attribute = attribute base { text }
+[
+  a:documentation [
+    "The purchase limit for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#base-value-and-purchase-limit"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#base-value-and-purchase-limit"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.limit.attribute = attribute limit { text }
+[
+  a:documentation [
+    "The spellcasting level for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#spellcasting"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#spellcasting"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.casting.attribute = attribute casting { text }
+[
+  a:documentation [
+    "The minor magic items available for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.minor.attribute = attribute minor { text }
+[
+  a:documentation [
+    "The medium magic items available for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.medium.attribute = attribute medium { text }
+[
+  a:documentation [
+    "The major magic items available for a settlement as described at "
+    h:a[href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"
+    "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#minor-items/medium-items/major-items"]
+    "."
+  ]
+]
 rpg.pathfinder.marketplace.major.attribute = attribute major { text }
 rpg.pathfinder.marketplace.attlist =
     rpg.pathfinder.marketplace.role.attribute?
@@ -106,6 +163,8 @@ rpg.pathfinder.marketplace.attlist =
     & rpg.pathfinder.marketplace.major.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## A section of a settlement statblock containing marketplace
+## information about the settlement.
 rpg.pathfinder.marketplace =
     element marketplace {
         rpg.pathfinder.marketplace.attlist
