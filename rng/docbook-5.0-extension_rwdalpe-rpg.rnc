@@ -37,31 +37,31 @@ rpg.general.location =
          | db.link.inlines)+
     }
 
-rpg.pathfinder.attribute.role.attribute = attribute role { text }
-rpg.pathfinder.attribute.score.attribute = attribute score { text }
-rpg.pathfinder.attribute.modifier.attribute = attribute modifier { text }
-rpg.pathfinder.attribute.attlist =
-    rpg.pathfinder.attribute.role.attribute?
-    & rpg.pathfinder.attribute.score.attribute?
-    & rpg.pathfinder.attribute.modifier.attribute?
+rpg.d20.attribute.role.attribute = attribute role { text }
+rpg.d20.attribute.score.attribute = attribute score { text }
+rpg.d20.attribute.modifier.attribute = attribute modifier { text }
+rpg.d20.attribute.attlist =
+    rpg.d20.attribute.role.attribute?
+    & rpg.d20.attribute.score.attribute?
+    & rpg.d20.attribute.modifier.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.pathfinder.attribute =
+rpg.d20.attribute =
     element attribute {
-        rpg.pathfinder.attribute.attlist,
+        rpg.d20.attribute.attlist,
         (db._text 
          | db.indexing.inlines
          | db.link.inlines)+
     }
-rpg.pathfinder.attributes.role.attribute = attribute role { text }
-rpg.pathfinder.attributes.attlist =
-    rpg.pathfinder.attributes.role.attribute?
+rpg.d20.attributes.role.attribute = attribute role { text }
+rpg.d20.attributes.attlist =
+    rpg.d20.attributes.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.pathfinder.attributes =
+rpg.d20.attributes =
     element attributes {
-        rpg.pathfinder.attributes.attlist,
-        rpg.pathfinder.attribute+
+        rpg.d20.attributes.attlist,
+        rpg.d20.attribute+
     }
     
 rpg.pathfinder.alignment.role.attribute = attribute role { text }
@@ -235,7 +235,7 @@ rpg.pathfinder.settlement =
         rpg.general.location,
         rpg.pathfinder.alignment,
         rpg.pathfinder.settlementtype,
-        rpg.pathfinder.attributes,
+        rpg.d20.attributes,
         rpg.pathfinder.settlementqualities,
         rpg.pathfinder.settlementdanger,
         rpg.pathfinder.settlementdisadvantages?,
@@ -246,7 +246,7 @@ rpg.pathfinder.settlement =
 rpg.general.inlines = rpg.general.location
 
 rpg.pathfinder.general.inlines = rpg.pathfinder.alignment 
-    | rpg.pathfinder.attribute
+    | rpg.d20.attribute
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
@@ -258,7 +258,7 @@ rpg.pathfinder.inlines = rpg.pathfinder.general.inlines
 
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
 rpg.pathfinder.blocks = rpg.pathfinder.settlement.blocks 
-    | rpg.pathfinder.attributes
+    | rpg.d20.attributes
 
 rpg.inlines = rpg.general.inlines | rpg.pathfinder.inlines
 rpg.blocks = rpg.pathfinder.blocks
