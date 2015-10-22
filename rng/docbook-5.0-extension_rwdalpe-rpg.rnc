@@ -64,14 +64,14 @@ rpg.d20.attributes =
         rpg.d20.attribute+
     }
     
-rpg.pathfinder.alignment.role.attribute = attribute role { text }
-rpg.pathfinder.alignment.attlist =
-    rpg.pathfinder.alignment.role.attribute?
+rpg.d20.alignment.role.attribute = attribute role { text }
+rpg.d20.alignment.attlist =
+    rpg.d20.alignment.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.pathfinder.alignment =
+rpg.d20.alignment =
     element alignment {
-        rpg.pathfinder.alignment.attlist,
+        rpg.d20.alignment.attlist,
         (db._text 
          | db.indexing.inlines
          | db.link.inlines)+
@@ -233,7 +233,7 @@ rpg.pathfinder.settlement =
     element settlement {
         rpg.pathfinder.settlement.attlist,
         rpg.general.location,
-        rpg.pathfinder.alignment,
+        rpg.d20.alignment,
         rpg.pathfinder.settlementtype,
         rpg.d20.attributes,
         rpg.pathfinder.settlementqualities,
@@ -245,7 +245,7 @@ rpg.pathfinder.settlement =
 
 rpg.general.inlines = rpg.general.location
 
-rpg.pathfinder.general.inlines = rpg.pathfinder.alignment 
+rpg.pathfinder.general.inlines = rpg.d20.alignment 
     | rpg.d20.attribute
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
