@@ -1,5 +1,7 @@
 # RPG Extensions for DocBook 5.0
 
+[![Build Status](https://travis-ci.org/rwdalpe/docbook-5.0-extension_rwdalpe-rpg.svg?branch=master)](https://travis-ci.org/rwdalpe/docbook-5.0-extension_rwdalpe-rpg)
+
 These are schema extensions for [DocBook 5.0][1] that provider a grammar for
 marking up concepts present in various table-top role-playing games (TTRPGs).
 
