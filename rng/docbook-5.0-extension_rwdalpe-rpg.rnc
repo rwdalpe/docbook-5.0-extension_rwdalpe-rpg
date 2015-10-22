@@ -171,11 +171,14 @@ rpg.pathfinder.marketplace =
     }
 
 rpg.pathfinder.population.role.attribute = attribute role { text }
+## A description of the count of a population, most frequently numeric
+## or percent.
 rpg.pathfinder.population.count.attribute = attribute count { text }
 rpg.pathfinder.population.attlist =
     rpg.pathfinder.population.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## A group of creatures categorized and enumerated as one population group
 rpg.pathfinder.population =
     element population {
         rpg.pathfinder.population.attlist,
@@ -191,22 +194,44 @@ rpg.pathfinder.population =
         )
     }
 rpg.pathfinder.populations.role.attribute = attribute role { text }
+## A total count or other description of a settlement's populations.
 rpg.pathfinder.populations.total.attribute = attribute total { text }
 rpg.pathfinder.populations.attlist =
     rpg.pathfinder.populations.role.attribute?
     & rpg.pathfinder.populations.total.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "Describes a collection of populations. Described in greater detail at "
+    h:a[ 
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#population" 
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#population"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.populations =
     element populations {
         rpg.pathfinder.populations.attlist,
         rpg.pathfinder.population+
     }
+
 rpg.pathfinder.government.role.attribute = attribute role { text }
 rpg.pathfinder.government.attlist =
     rpg.pathfinder.government.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A type of government. Described in greater detail at "
+    h:a[ 
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#government" 
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#government"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.government =
     element government {
         rpg.pathfinder.demographics.attlist,
@@ -214,22 +239,36 @@ rpg.pathfinder.government =
          | db.indexing.inlines
          | db.link.inlines)+
     }
+
 rpg.pathfinder.demographics.role.attribute = attribute role { text }
 rpg.pathfinder.demographics.attlist =
     rpg.pathfinder.demographics.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## A section of a settlement statblock containing demographics
+## information about the settlement.
 rpg.pathfinder.demographics =
     element demographics {
         rpg.pathfinder.demographics.attlist,
         rpg.pathfinder.government,
         rpg.pathfinder.populations
     }
+
 rpg.pathfinder.settlementdisadvantage.role.attribute = attribute role { text }
 rpg.pathfinder.settlementdisadvantage.attlist =
     rpg.pathfinder.settlementdisadvantage.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A settlement disadvantage, as described at "
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#settlement-disadvantages"
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#settlement-disadvantages"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.settlementdisadvantage =
     element settlementdisadvantage {
         rpg.pathfinder.settlementdisadvantage.attlist,
@@ -237,23 +276,38 @@ rpg.pathfinder.settlementdisadvantage =
          | db.indexing.inlines
          | db.link.inlines)+
     }
+
 rpg.pathfinder.settlementdisadvantages.role.attribute = attribute role { text }
 rpg.pathfinder.settlementdisadvantages.attlist =
     rpg.pathfinder.settlementdisadvantages.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## The section of a settlement statblock that lists all the disadvantages a
+## settlement has.
 rpg.pathfinder.settlementdisadvantages =
     element settlementdisadvantages {
         rpg.pathfinder.settlementdisadvantages.attlist,
         rpg.pathfinder.settlementdisadvantage+
     }
+
 rpg.pathfinder.settlementdanger.role.attribute = attribute role { text }
+## The modifier of a settlement's danger value.
 rpg.pathfinder.settlementdanger.modifier.attribute = attribute modifier { text }
 rpg.pathfinder.settlementdanger.attlist =
     rpg.pathfinder.settlementdanger.role.attribute?
     & rpg.pathfinder.settlementdanger.modifier.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A settlement's danger, as described at "
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#danger"
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#danger"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.settlementdanger =
     element settlementdanger {
         rpg.pathfinder.settlementdanger.attlist,
@@ -261,11 +315,22 @@ rpg.pathfinder.settlementdanger =
          | db.indexing.inlines
          | db.link.inlines)+
     }
+
 rpg.pathfinder.settlementquality.role.attribute = attribute role { text }
 rpg.pathfinder.settlementquality.attlist =
     rpg.pathfinder.settlementquality.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A settlement quality, as described at "
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#settlement-qualities"
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#settlement-qualities"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.settlementquality =
     element settlementquality {
         rpg.pathfinder.settlementquality.attlist,
@@ -273,33 +338,58 @@ rpg.pathfinder.settlementquality =
          | db.indexing.inlines
          | db.link.inlines)+
     }
+
 rpg.pathfinder.settlementqualities.role.attribute = attribute role { text }
 rpg.pathfinder.settlementqualities.attlist =
     rpg.pathfinder.settlementquality.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+## A section of a settlement's statblock describing all of that settlement's
+## qualities.
 rpg.pathfinder.settlementqualities =
     element settlementqualities {
         rpg.pathfinder.settlementquality.attlist,
         rpg.pathfinder.settlementquality+
-    }   
+    }
+
 rpg.pathfinder.settlementtype.role.attribute = attribute role { text }
 rpg.pathfinder.settlementtype.attlist =
     rpg.pathfinder.settlementtype.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "The type of a settlement, as described at "
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html"
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.settlementtype =
     element settlementtype {
         rpg.pathfinder.settlementtype.attlist,
         (db._text 
          | db.indexing.inlines
          | db.link.inlines)+
-    }   
+    }
+
 rpg.pathfinder.settlement.role.attribute = attribute role { text }
 rpg.pathfinder.settlement.attlist =
     rpg.pathfinder.settlement.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+[
+  a:documentation[
+    "A complete statblock for a pathfinder settlement, as described at "
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html"
+      "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html"
+    ]
+    "."
+  ]
+]
 rpg.pathfinder.settlement =
     element settlement {
         rpg.pathfinder.settlement.attlist,
