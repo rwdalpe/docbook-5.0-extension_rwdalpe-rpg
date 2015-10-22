@@ -16,6 +16,7 @@
 namespace db = "http://docbook.org/ns/docbook"
 namespace rpg = "http://docbook.org/ns/docbook"
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace h = "http://www.w3.org/1999/xhtml"
 default namespace = "http://docbook.org/ns/docbook"
 
 include "docbookxi.rnc"
@@ -29,6 +30,7 @@ rpg.general.location.attlist =
     rpg.general.location.role.attribute ?
     & db.common.attributes
     & db.common.linking.attributes
+## The name of a location
 rpg.general.location =
     element location {
         rpg.general.location.attlist,
@@ -37,31 +39,41 @@ rpg.general.location =
          | db.link.inlines)+
     }
 
-rpg.d20.attribute.role.attribute = attribute role { text }
-rpg.d20.attribute.score.attribute = attribute score { text }
-rpg.d20.attribute.modifier.attribute = attribute modifier { text }
-rpg.d20.attribute.attlist =
-    rpg.d20.attribute.role.attribute?
-    & rpg.d20.attribute.score.attribute?
-    & rpg.d20.attribute.modifier.attribute?
+rpg.d20.abilityscore.role.attribute = attribute role { text }
+## The raw score value for an ability score,
+rpg.d20.abilityscore.score.attribute = attribute score { text }
+## The modifier for an ability score.
+rpg.d20.abilityscore.modifier.attribute = attribute modifier { text }
+rpg.d20.abilityscore.attlist =
+    rpg.d20.abilityscore.role.attribute?
+    & rpg.d20.abilityscore.score.attribute?
+    & rpg.d20.abilityscore.modifier.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.d20.attribute =
-    element attribute {
-        rpg.d20.attribute.attlist,
+[
+  a:documentation[
+    "An ability score from the d20 system, as described at "
+    h:a[ href="http://paizo.com/pathfinderRPG/prd/gettingStarted.html#ability-scores" 
+    "http://paizo.com/pathfinderRPG/prd/gettingStarted.html#ability-scores" ]"."
+  ]
+]
+rpg.d20.abilityscore =
+    element abilityscore {
+        rpg.d20.abilityscore.attlist,
         (db._text 
          | db.indexing.inlines
          | db.link.inlines)+
     }
-rpg.d20.attributes.role.attribute = attribute role { text }
-rpg.d20.attributes.attlist =
-    rpg.d20.attributes.role.attribute?
+
+rpg.d20.abilityscores.role.attribute = attribute role { text }
+rpg.d20.abilityscores.attlist =
+    rpg.d20.abilityscores.role.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.d20.attributes =
-    element attributes {
-        rpg.d20.attributes.attlist,
-        rpg.d20.attribute+
+rpg.d20.abilityscores =
+    element abilityscores {
+        rpg.d20.abilityscores.attlist,
+        rpg.d20.abilityscore+
     }
     
 rpg.d20.alignment.role.attribute = attribute role { text }
@@ -235,7 +247,7 @@ rpg.pathfinder.settlement =
         rpg.general.location,
         rpg.d20.alignment,
         rpg.pathfinder.settlementtype,
-        rpg.d20.attributes,
+        rpg.d20.abilityscores,
         rpg.pathfinder.settlementqualities,
         rpg.pathfinder.settlementdanger,
         rpg.pathfinder.settlementdisadvantages?,
@@ -245,23 +257,28 @@ rpg.pathfinder.settlement =
 
 rpg.general.inlines = rpg.general.location
 
-rpg.pathfinder.general.inlines = rpg.d20.alignment 
-    | rpg.d20.attribute
+rpg.d20.inlines = rpg.d20.alignment 
+    | rpg.d20.abilityscore
+
+rpg.d20.blocks = rpg.d20.abilityscores
+
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
     | rpg.pathfinder.settlementdisadvantage 
     | rpg.pathfinder.government
     | rpg.pathfinder.population
-rpg.pathfinder.inlines = rpg.pathfinder.general.inlines 
+rpg.pathfinder.inlines = rpg.d20.inlines 
     | rpg.pathfinder.settlement.inlines
 
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
-rpg.pathfinder.blocks = rpg.pathfinder.settlement.blocks 
-    | rpg.d20.attributes
+rpg.pathfinder.blocks = rpg.d20.blocks
+    | rpg.pathfinder.settlement.blocks 
 
-rpg.inlines = rpg.general.inlines | rpg.pathfinder.inlines
-rpg.blocks = rpg.pathfinder.blocks
+rpg.inlines = rpg.general.inlines 
+    | rpg.d20.inlines
+    | rpg.pathfinder.inlines
+rpg.blocks = rpg.d20.blocks | rpg.pathfinder.blocks
 
 db.nopara.blocks |= rpg.blocks
 db.all.inlines |= rpg.inlines
