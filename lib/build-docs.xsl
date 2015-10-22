@@ -21,6 +21,8 @@
 	xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
 	xmlns:rng="http://relaxng.org/ns/structure/1.0"
 	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://rwdalpe.github.io/docbook-5.0-extension_rwdalpe-rpg/private"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://www.w3.org/1999/xhtml">
 
 	<xsl:param name="version" />
@@ -29,7 +31,7 @@
 		method="html"
 		omit-xml-declaration="yes"
 		indent="yes"
-		exclude-result-prefixes="xsl a rng " />
+		exclude-result-prefixes="xsl a rng h p xs #default" />
 
 	<xsl:template match="text()|comment()|processing-instruction()" />
 
@@ -189,16 +191,187 @@
 			<xsl:if test="a:documentation">
 				<section class="docs">
 					<h3>Documentation</h3>
-					<xsl:for-each select="tokenize(a:documentation/text(),'&#xA;&#xA;')">
-						<p>
-							<xsl:value-of select="normalize-space(.)" />
-						</p>
-					</xsl:for-each>
+
+					<xsl:variable
+						name="processedNodes"
+						select="p:processDocNodes(./a:documentation/node())"
+						as="node()*" />
+
+					<xsl:apply-templates
+						select="$processedNodes"
+						mode="doc" />
 				</section>
 			</xsl:if>
 			<xsl:call-template name="linksToParents" />
 			<xsl:call-template name="linksToChildren" />
 		</section>
+	</xsl:template>
+
+	<xsl:function name="p:processDocNodes">
+		<xsl:param
+			name="docNodes"
+			as="node()*"
+			required="yes" />
+
+		<xsl:choose>
+			<xsl:when test="count($docNodes) > 0">
+
+				<xsl:variable
+					name="resultNodes"
+					as="node()*">
+
+					<xsl:variable
+						name="currentNode"
+						select="$docNodes[1]" />
+					<xsl:choose>
+						<xsl:when test="$currentNode/self::text()">
+							<xsl:variable
+								name="tokenized"
+								select="tokenize($currentNode, '\n\s*\n+')"
+								as="xs:string*" />
+
+							<xsl:choose>
+								<xsl:when test="count($tokenized) > 1">
+									<xsl:for-each select="subsequence($tokenized, 1, count($tokenized)-1)">
+										<p:processedNodeWrapper>
+											<p:subNodes>
+												<xsl:value-of select="." />
+											</p:subNodes>
+										</p:processedNodeWrapper>
+									</xsl:for-each>
+									<xsl:variable name="remainingNodes">
+										<p:wrapper>
+											<xsl:value-of select="$tokenized[count($tokenized)]" />
+											<xsl:sequence select="$currentNode/following-sibling::node()" />
+										</p:wrapper>
+									</xsl:variable>
+									<xsl:sequence
+										select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:sequence
+										select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:when test="$currentNode/self::p:textwrapper">
+							<p:processedNodeWrapper>
+								<p:subNodes>
+									<xsl:value-of select="$currentNode" />
+								</p:subNodes>
+							</p:processedNodeWrapper>
+							<xsl:variable name="remainingNodes">
+								<p:wrapper>
+									<xsl:sequence select="$currentNode/following-sibling::node()" />
+								</p:wrapper>
+							</xsl:variable>
+							<xsl:sequence
+								select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:sequence
+								select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+
+				<xsl:sequence select="$resultNodes" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="()" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
+
+	<xsl:function name="p:processSingleNonBreakingNode">
+		<xsl:param
+			name="currentNode"
+			as="node()"
+			required="yes" />
+		<xsl:param
+			name="contextNodes"
+			as="node()*"
+			required="yes" />
+
+		<xsl:variable
+			name="hasNextText"
+			select="exists($currentNode/following-sibling::text()[
+                  not(((string-length(string(.)) - string-length(translate(string(.), '&#xA;', ''))) le 1))
+                ])"
+			as="xs:boolean" />
+		<xsl:variable
+			name="nextTextIndex"
+			select="if($hasNextText) 
+                  then count($currentNode/following-sibling::text()[
+                    not(((string-length(string(.)) - string-length(translate(string(.), '&#xA;', ''))) le 1)) 
+                  ][1]/preceding-sibling::node())+1 
+                  else count($contextNodes)" />
+		<xsl:variable
+			name="nextText"
+			select="if ($hasNextText) then $contextNodes[$nextTextIndex] else ()" />
+		<xsl:variable
+			name="nextTextTokenized"
+			select="if ($hasNextText) then tokenize($nextText, '\n\s*\n+') else ()" />
+		<p:processedNodeWrapper>
+			<p:subNodes>
+				<xsl:choose>
+					<xsl:when
+						test="$currentNode/self::text() or $currentNode/self::p:textwrapper">
+						<xsl:value-of select="$currentNode" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:copy-of select="$currentNode" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:sequence
+					select="if ($hasNextText) then subsequence($contextNodes, 2, $nextTextIndex - 2) else subsequence($contextNodes, 2)" />
+				<xsl:if test="$hasNextText">
+					<xsl:value-of select="$nextTextTokenized[1]" />
+				</xsl:if>
+			</p:subNodes>
+		</p:processedNodeWrapper>
+		<xsl:variable name="remainingNodes">
+			<p:wrapper>
+				<xsl:if test="$hasNextText and count($nextTextTokenized) gt 1">
+					<xsl:for-each
+						select="subsequence($nextTextTokenized, 2, count($nextTextTokenized)-2)">
+						<p:textwrapper>
+							<xsl:value-of select="." />
+						</p:textwrapper>
+					</xsl:for-each>
+					<xsl:value-of select="$nextTextTokenized[count($nextTextTokenized)]" />
+				</xsl:if>
+				<xsl:sequence
+					select="subsequence($currentNode/following-sibling::node(), $nextTextIndex)" />
+			</p:wrapper>
+		</xsl:variable>
+		<xsl:sequence select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
+
+	</xsl:function>
+
+	<xsl:template
+		match="p:processedNodeWrapper"
+		mode="doc">
+		<p>
+			<xsl:apply-templates
+				select="./p:subNodes/node()"
+				mode="doc" />
+		</p>
+	</xsl:template>
+
+	<xsl:template
+		match="text()"
+		mode="doc">
+		<xsl:value-of select="." />
+	</xsl:template>
+
+	<xsl:template
+		match="h:*"
+		mode="doc">
+		<xsl:element name="{local-name(.)}">
+			<xsl:sequence select="./@*" />
+			<xsl:apply-templates mode="doc" />
+		</xsl:element>
 	</xsl:template>
 
 	<xsl:template name="toc">
