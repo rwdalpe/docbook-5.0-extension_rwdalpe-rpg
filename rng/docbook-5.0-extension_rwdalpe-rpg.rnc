@@ -98,6 +98,56 @@ rpg.d20.alignment =
          | db.link.inlines)+
     }
 
+rpg.d20.challengerating.role.attribute = attribute role { text }
+rpg.d20.challengerating.attlist =
+    rpg.d20.challengerating.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.challengerating =
+    element challengerating {
+        rpg.d20.challengerating.attlist,
+        db._text
+    }
+
+rpg.d20.xpreward.role.attribute = attribute role { text }
+rpg.d20.xpreward.attlist =
+    rpg.d20.xpreward.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.xpreward =
+    element xpreward {
+        rpg.d20.xpreward.attlist,
+        db._text
+    }
+
+rpg.d20.race.role.attribute = attribute role { text }
+rpg.d20.race.attlist =
+    rpg.d20.race.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.race =
+    element race {
+        rpg.d20.race.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.linking.inlines)*
+    }
+
+rpg.d20.class.role.attribute = attribute role { text }
+rpg.d20.class.level.attribute = attribute level { text }
+rpg.d20.class.attlist =
+    rpg.d20.class.role.attribute?
+    & rpg.d20.class.level.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.class =
+    element class {
+        rpg.d20.class.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.linking.inlines)*
+    }
+
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
 [
   a:documentation [
