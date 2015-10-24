@@ -111,8 +111,10 @@
 				<aside>
 					<p>
 						These are schema extensions for DocBook 5.0 that provider a
-						grammar for marking up concepts present in various table-top
-						role-playing games (TTRPGs).
+						grammar for
+						marking up concepts present in various table-top
+						role-playing games
+						(TTRPGs).
 					</p>
 					<p>
 						See project details at
@@ -124,27 +126,33 @@
 					</p>
 					<p>
 						This program is free software: you can redistribute it and/or
-						modify it under the terms of the GNU Affero General Public License
-						as published by the Free Software Foundation, either version 3 of
-						the License, or (at your option) any later version.
+						modify it
+						under the terms of the GNU Affero General Public License
+						as published by
+						the Free Software Foundation, either version 3 of
+						the License, or (at your
+						option) any later version.
 					</p>
 					<p>
 						This program is distributed in the hope that it will be useful,
-						but WITHOUT ANY WARRANTY; without even the implied warranty of
-						MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-						Affero General Public License for more details.
+						but
+						WITHOUT ANY WARRANTY; without even the implied warranty of
+						MERCHANTABILITY
+						or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+						Affero General Public
+						License for more details.
 					</p>
 					<p>
 						You should have received a copy of the GNU Affero General Public
-						License along with this program. If not, see
+						License
+						along with this program. If not, see
 						<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>
 						.
 					</p>
 				</aside>
 				<section id="general">
 					<h2>General Documentation</h2>
-					<xsl:for-each
-						select="tokenize(/rng:grammar/a:documentation/text(),'&#xA;&#xA;')">
+					<xsl:for-each select="tokenize(/rng:grammar/a:documentation/text(),'&#xA;&#xA;')">
 						<p>
 							<xsl:value-of select="normalize-space(.)" />
 						</p>
@@ -245,12 +253,10 @@
 											<xsl:sequence select="$currentNode/following-sibling::node()" />
 										</p:wrapper>
 									</xsl:variable>
-									<xsl:sequence
-										select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
+									<xsl:sequence select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:sequence
-										select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
+									<xsl:sequence select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
@@ -265,12 +271,10 @@
 									<xsl:sequence select="$currentNode/following-sibling::node()" />
 								</p:wrapper>
 							</xsl:variable>
-							<xsl:sequence
-								select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
+							<xsl:sequence select="p:processDocNodes($remainingNodes/p:wrapper/node())" />
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:sequence
-								select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
+							<xsl:sequence select="p:processSingleNonBreakingNode($currentNode, $docNodes)" />
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -315,8 +319,7 @@
 		<p:processedNodeWrapper>
 			<p:subNodes>
 				<xsl:choose>
-					<xsl:when
-						test="$currentNode/self::text() or $currentNode/self::p:textwrapper">
+					<xsl:when test="$currentNode/self::text() or $currentNode/self::p:textwrapper">
 						<xsl:value-of select="$currentNode" />
 					</xsl:when>
 					<xsl:otherwise>
@@ -380,8 +383,7 @@
 			<li>
 				<a href="#general">General Documentation</a>
 			</li>
-			<xsl:for-each
-				select="/rng:grammar/rng:define[not(starts-with(@name, 'db.'))]">
+			<xsl:for-each select="/rng:grammar/rng:define[not(starts-with(@name, 'db.'))]">
 				<li>
 					<a href="#{@name}">
 						<xsl:value-of select="@name" />
@@ -492,10 +494,10 @@
 		<li>
 			<xsl:choose>
 				<xsl:when test="parent::rng:oneOrMore">
-					one or more of:
+					one or more of (in any ordering):
 				</xsl:when>
 				<xsl:when test="parent::rng:zeroOrMore">
-					zero or more of:
+					zero or more of (in any ordering):
 				</xsl:when>
 				<xsl:when test="parent::rng:optional">
 					optional single choice of:
@@ -511,18 +513,31 @@
 	</xsl:template>
 
 	<xsl:template
+		match="rng:interleave"
+		mode="children">
+
+		<li>
+			Any ordering of:
+			<ul>
+				<xsl:apply-templates mode="children" />
+			</ul>
+		</li>
+
+	</xsl:template>
+
+	<xsl:template
 		match="rng:group"
 		mode="children">
 		<li>
 			<xsl:choose>
 				<xsl:when test="parent::rng:oneOrMore">
-					one or more of your
+					one or more of:
 				</xsl:when>
 				<xsl:when test="parent::rng:zeroOrMore">
-					zero or more of your
+					zero or more of:
 				</xsl:when>
 				<xsl:when test="parent::rng:optional">
-					optional
+					optional:
 				</xsl:when>
 				<xsl:otherwise />
 			</xsl:choose>
