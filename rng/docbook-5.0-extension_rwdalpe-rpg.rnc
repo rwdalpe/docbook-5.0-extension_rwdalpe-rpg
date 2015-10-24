@@ -135,9 +135,11 @@ rpg.d20.race =
 
 rpg.d20.class.role.attribute = attribute role { text }
 rpg.d20.class.level.attribute = attribute level { text }
+rpg.d20.class.favored.attribute =  attribute favored { text }
 rpg.d20.class.attlist =
     rpg.d20.class.role.attribute?
     & rpg.d20.class.level.attribute?
+    & rpg.d20.class.favored.attribute?
     & db.common.attributes
     & db.common.linking.attributes
 rpg.d20.class =
@@ -146,6 +148,87 @@ rpg.d20.class =
         (db._text
          | db.indexing.inlines
          | db.linking.inlines)*
+    }
+
+rpg.d20.size.role.attribute = attribute role { text }
+rpg.d20.size.attlist =
+    rpg.d20.size.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.size =
+    element size {
+        rpg.d20.size.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.linking.inlines)*
+    }
+
+rpg.d20.creaturetype.role.attribute = attribute role { text }
+rpg.d20.creaturetype.attlist =
+    rpg.d20.creaturetype.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creaturetype =
+    element creaturetype {
+        rpg.d20.creaturetype.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.linking.inlines)*
+    }
+
+rpg.d20.creaturesubtype.role.attribute = attribute role { text }
+rpg.d20.creaturesubtype.attlist =
+    rpg.d20.creaturesubtype.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creaturesubtype =
+    element creaturesubtype {
+        rpg.d20.creaturesubtype.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.linking.inlines)*
+    }
+
+rpg.d20.creaturename.role.attribute = attribute role { text }
+rpg.d20.creaturename.attlist =
+    rpg.d20.creaturename.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creaturename =
+    element creaturename {
+        rpg.d20.creaturename.attlist,
+        (db.person?
+         & (db._text
+            | db.indexing.inlines
+            | db.linking.inlines)*
+        )
+    }
+
+rpg.d20.creaturetypes.role.attribute = attribute role { text }
+rpg.d20.creaturetypes.attlist =
+    rpg.d20.creaturesubtype.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creaturetypes =
+    element creaturetypes {
+        rpg.d20.creaturesubtype.attlist,
+        rpg.d20.creaturetype,
+        rpg.d20.creaturesubtype*
+    }
+
+rpg.d20.creature.role.attribute = attribute role { text }
+rpg.d20.creature.attlist =
+    rpg.d20.creature.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creature =
+    element creature {
+        rpg.d20.creature.attlist,
+        rpg.d20.creaturename,
+        rpg.d20.challengerating,
+        rpg.d20.xpreward,
+        rpg.d20.race,
+        rpg.d20.creaturetypes
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
