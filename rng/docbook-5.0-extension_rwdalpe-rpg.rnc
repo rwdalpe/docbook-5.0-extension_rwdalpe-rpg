@@ -130,7 +130,7 @@ rpg.d20.race =
         rpg.d20.race.attlist,
         (db._text
          | db.indexing.inlines
-         | db.linking.inlines)*
+         | db.link.inlines)*
     }
 
 rpg.d20.class.role.attribute = attribute role { text }
@@ -147,7 +147,7 @@ rpg.d20.class =
         rpg.d20.class.attlist,
         (db._text
          | db.indexing.inlines
-         | db.linking.inlines)*
+         | db.link.inlines)*
     }
 
 rpg.d20.size.role.attribute = attribute role { text }
@@ -160,7 +160,7 @@ rpg.d20.size =
         rpg.d20.size.attlist,
         (db._text
          | db.indexing.inlines
-         | db.linking.inlines)*
+         | db.link.inlines)*
     }
 
 rpg.d20.creaturetype.role.attribute = attribute role { text }
@@ -173,7 +173,7 @@ rpg.d20.creaturetype =
         rpg.d20.creaturetype.attlist,
         (db._text
          | db.indexing.inlines
-         | db.linking.inlines)*
+         | db.link.inlines)*
     }
 
 rpg.d20.creaturesubtype.role.attribute = attribute role { text }
@@ -186,7 +186,7 @@ rpg.d20.creaturesubtype =
         rpg.d20.creaturesubtype.attlist,
         (db._text
          | db.indexing.inlines
-         | db.linking.inlines)*
+         | db.link.inlines)*
     }
 
 rpg.d20.creaturename.role.attribute = attribute role { text }
@@ -200,7 +200,7 @@ rpg.d20.creaturename =
         (db.person?
          & (db._text
             | db.indexing.inlines
-            | db.linking.inlines)*
+            | db.link.inlines)*
         )
     }
 
@@ -539,10 +539,21 @@ rpg.pathfinder.settlement =
 
 rpg.general.inlines = rpg.general.location
 
+rpg.d20.creatureinlines = rpg.d20.challengerating
+    | rpg.d20.xpreward
+    | rpg.d20.race
+    | rpg.d20.class
+    | rpg.d20.size
+    | rpg.d20.creaturetype
+    | rpg.d20.creaturesubtype
+    | rpg.d20.creaturename
 rpg.d20.inlines = rpg.d20.alignment 
     | rpg.d20.abilityscore
+    | rpg.d20.creatureinlines
 
+rpg.d20.creatureblocks = rpg.d20.creature
 rpg.d20.blocks = rpg.d20.abilityscores
+    | rpg.d20.creatureblocks
 
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
