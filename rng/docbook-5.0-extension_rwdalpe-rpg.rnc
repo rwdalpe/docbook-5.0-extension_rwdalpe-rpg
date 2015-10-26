@@ -227,7 +227,10 @@ rpg.d20.creature =
         rpg.d20.creaturename,
         rpg.d20.challengerating,
         rpg.d20.xpreward,
-        rpg.d20.race,
+        rpg.d20.race?,
+        rpg.d20.class*,
+        rpg.d20.alignment,
+        rpg.d20.size,
         rpg.d20.creaturetypes
     }
 
