@@ -25,6 +25,19 @@ a:documentation [ """When you see a *.role.attribute definition, consider it a
 declaration of a DocBook role attribute for that element, as that is what it
 should be processed as.""" ]
 
+rpg.general.qualifier.role.attribute = attribute role { text }
+rpg.general.qualifier.attlist =
+    rpg.general.qualifier.role.attribute ?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.general.qualifier =
+    element qualifier {
+        rpg.general.qualifier.attlist,
+        (db._text 
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
 rpg.general.location.role.attribute = attribute role { text }
 rpg.general.location.attlist =
     rpg.general.location.role.attribute ?
@@ -216,14 +229,72 @@ rpg.d20.creaturetypes =
         rpg.d20.creaturesubtype*
     }
 
-rpg.d20.creature.role.attribute = attribute role { text }
-rpg.d20.creature.attlist =
-    rpg.d20.creature.role.attribute?
+rpg.d20.initiative.role.attribute = attribute role { text }
+rpg.d20.initiative.modifier.attribute = attribute modifier { text }
+rpg.d20.initiative.attlist =
+    rpg.d20.initiative.role.attribute?
+    & rpg.d20.initiative.modifier.attribute?
     & db.common.attributes
     & db.common.linking.attributes
-rpg.d20.creature =
+rpg.d20.initiative =
+    element initiative {
+        rpg.d20.initiative.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.d20.skill.role.attribute = attribute role { text }
+rpg.d20.skill.modifier.attribute = attribute modifier { text }
+rpg.d20.skill.attlist =
+    rpg.d20.skill.role.attribute?
+    & rpg.d20.skill.modifier.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.skill =
+    element skill {
+        rpg.d20.skill.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*,
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.sense.role.attribute = attribute role { text }
+rpg.pathfinder.sense.range.attribute = attribute range { text }
+rpg.pathfinder.sense.attlist =
+    rpg.pathfinder.sense.role.attribute?
+    & rpg.pathfinder.sense.range.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.sense =
+    element sense {
+        rpg.pathfinder.sense.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.pathfinder.senses.role.attribute = attribute role { text }
+rpg.pathfinder.senses.attlist =
+    rpg.pathfinder.senses.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.senses =
+    element senses {
+        rpg.pathfinder.senses.attlist,
+        rpg.pathfinder.sense*,
+        rpg.d20.skill?
+    }
+
+rpg.pathfinder.creature.role.attribute = attribute role { text }
+rpg.pathfinder.creature.attlist =
+    rpg.pathfinder.creature.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.creature =
     element creature {
-        rpg.d20.creature.attlist,
+        rpg.pathfinder.creature.attlist,
         rpg.d20.creaturename,
         rpg.d20.challengerating,
         rpg.d20.xpreward,
@@ -231,7 +302,9 @@ rpg.d20.creature =
         rpg.d20.class*,
         rpg.d20.alignment,
         rpg.d20.size,
-        rpg.d20.creaturetypes
+        rpg.d20.creaturetypes,
+        rpg.d20.initiative,
+        rpg.pathfinder.senses?
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
@@ -552,11 +625,10 @@ rpg.d20.creatureinlines = rpg.d20.challengerating
     | rpg.d20.creaturename
 rpg.d20.inlines = rpg.d20.alignment 
     | rpg.d20.abilityscore
+    | rpg.d20.skill
     | rpg.d20.creatureinlines
 
-rpg.d20.creatureblocks = rpg.d20.creature
 rpg.d20.blocks = rpg.d20.abilityscores
-    | rpg.d20.creatureblocks
 
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
@@ -565,10 +637,13 @@ rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype
     | rpg.pathfinder.government
     | rpg.pathfinder.population
 rpg.pathfinder.inlines = rpg.d20.inlines 
+    | rpg.pathfinder.sense
     | rpg.pathfinder.settlement.inlines
 
+rpg.pathfinder.creature.blocks = rpg.pathfinder.creature
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
 rpg.pathfinder.blocks = rpg.d20.blocks
+    | rpg.pathfinder.creature.blocks
     | rpg.pathfinder.settlement.blocks 
 
 rpg.inlines = rpg.general.inlines 
