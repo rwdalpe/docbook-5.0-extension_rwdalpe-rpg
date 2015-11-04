@@ -260,6 +260,22 @@ rpg.d20.skill =
         rpg.general.qualifier?
     }
 
+rpg.d20.dc.role.attribute = attribute role { text }
+rpg.d20.dc.rating.attribute = attribute rating { text }
+rpg.d20.dc.attlist =
+    rpg.d20.dc.role.attribute?
+    & rpg.d20.dc.rating.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.dc =
+    element dc {
+        rpg.d20.dc.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+
 rpg.pathfinder.sense.role.attribute = attribute role { text }
 rpg.pathfinder.sense.range.attribute = attribute range { text }
 rpg.pathfinder.sense.attlist =
@@ -287,6 +303,24 @@ rpg.pathfinder.senses =
         rpg.d20.skill?
     }
 
+rpg.pathfinder.aura.role.attribute = attribute role { text }
+rpg.pathfinder.aura.range.attribute = attribute range { text }
+rpg.pathfinder.aura.attlist =
+    rpg.pathfinder.aura.role.attribute?
+    & rpg.pathfinder.aura.range.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.aura =
+    element aura {
+        rpg.pathfinder.aura.attlist,
+        (
+         rpg.d20.dc?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        )
+    }
+
 rpg.pathfinder.creature.role.attribute = attribute role { text }
 rpg.pathfinder.creature.attlist =
     rpg.pathfinder.creature.role.attribute?
@@ -304,7 +338,8 @@ rpg.pathfinder.creature =
         rpg.d20.size,
         rpg.d20.creaturetypes,
         rpg.d20.initiative,
-        rpg.pathfinder.senses?
+        rpg.pathfinder.senses?,
+        rpg.pathfinder.aura*
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
@@ -615,7 +650,7 @@ rpg.pathfinder.settlement =
 
 rpg.general.inlines = rpg.general.location
 
-rpg.d20.creatureinlines = rpg.d20.challengerating
+rpg.d20.creature.inlines = rpg.d20.challengerating
     | rpg.d20.xpreward
     | rpg.d20.race
     | rpg.d20.class
@@ -626,10 +661,13 @@ rpg.d20.creatureinlines = rpg.d20.challengerating
 rpg.d20.inlines = rpg.d20.alignment 
     | rpg.d20.abilityscore
     | rpg.d20.skill
-    | rpg.d20.creatureinlines
+    | rpg.d20.creature.inlines
+    | rpg.d20.dc
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
+rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
+    | rpg.pathfinder.aura
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
@@ -637,8 +675,8 @@ rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype
     | rpg.pathfinder.government
     | rpg.pathfinder.population
 rpg.pathfinder.inlines = rpg.d20.inlines 
-    | rpg.pathfinder.sense
     | rpg.pathfinder.settlement.inlines
+    | rpg.pathfinder.creature.inlines
 
 rpg.pathfinder.creature.blocks = rpg.pathfinder.creature
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
