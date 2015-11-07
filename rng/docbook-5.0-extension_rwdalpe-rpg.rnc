@@ -392,6 +392,53 @@ rpg.pathfinder.aura =
         )
     }
 
+rpg.pathfinder.hp.regeneration.role.attribute = attribute role { text }
+rpg.pathfinder.hp.regeneration.attlist =
+    rpg.pathfinder.hp.regeneration.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.hp.regeneration =
+    element regeneration {
+        rpg.pathfinder.hp.regeneration.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+    
+rpg.pathfinder.hp.fasthealing.role.attribute = attribute role { text }
+rpg.pathfinder.hp.fasthealing.attlist =
+    rpg.pathfinder.hp.fasthealing.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.hp.fasthealing =
+    element fasthealing {
+        rpg.pathfinder.hp.fasthealing.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.pathfinder.hp.role.attribute = attribute role { text }
+rpg.pathfinder.hp.hdtotal.attribute = attribute hdtotal { text }
+rpg.pathfinder.hp.expanded.attribute = attribute expanded { text }
+rpg.pathfinder.hp.attlist =
+    rpg.pathfinder.hp.role.attribute?
+    & rpg.pathfinder.hp.hdtotal.attribute?
+    & rpg.pathfinder.hp.expanded.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.hp =
+    element hp {
+        rpg.pathfinder.hp.attlist,
+        (
+         rpg.pathfinder.hp.fasthealing?
+         & rpg.pathfinder.hp.regeneration?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        )
+    }
+
 rpg.pathfinder.defenses.role.attribute = attribute role { text }
 rpg.pathfinder.defenses.attlist =
     rpg.pathfinder.defenses.role.attribute?
@@ -400,7 +447,8 @@ rpg.pathfinder.defenses.attlist =
 rpg.pathfinder.defenses =
     element defenses {
         rpg.pathfinder.defenses.attlist,
-        rpg.d20.ac
+        rpg.d20.ac,
+        rpg.pathfinder.hp
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
