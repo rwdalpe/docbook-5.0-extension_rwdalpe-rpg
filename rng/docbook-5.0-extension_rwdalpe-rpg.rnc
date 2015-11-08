@@ -347,6 +347,22 @@ rpg.d20.ac =
         rpg.general.modifier*
     }
 
+rpg.d20.save.role.attribute = attribute role { text }
+rpg.d20.save.modifier.attribute = attribute modifier { text }
+rpg.d20.save.attlist =
+    rpg.d20.save.role.attribute?
+    & rpg.d20.save.modifier.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.save =
+    element save {
+        rpg.d20.save.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+,
+        rpg.general.qualifier*
+    }
+
 rpg.pathfinder.sense.role.attribute = attribute role { text }
 rpg.pathfinder.sense.range.attribute = attribute range { text }
 rpg.pathfinder.sense.attlist =
@@ -392,6 +408,19 @@ rpg.pathfinder.aura =
         )
     }
 
+rpg.pathfinder.hp.hpval.role.attribute = attribute role { text }
+rpg.pathfinder.hp.hpval.attlist =
+    rpg.pathfinder.hp.hpval.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.hp.hpval =
+    element hpval {
+        rpg.pathfinder.hp.hpval.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
 rpg.pathfinder.hp.regeneration.role.attribute = attribute role { text }
 rpg.pathfinder.hp.regeneration.attlist =
     rpg.pathfinder.hp.regeneration.role.attribute?
@@ -404,7 +433,7 @@ rpg.pathfinder.hp.regeneration =
          | db.indexing.inlines
          | db.link.inlines)*
     }
-    
+
 rpg.pathfinder.hp.fasthealing.role.attribute = attribute role { text }
 rpg.pathfinder.hp.fasthealing.attlist =
     rpg.pathfinder.hp.fasthealing.role.attribute?
@@ -431,12 +460,23 @@ rpg.pathfinder.hp =
     element hp {
         rpg.pathfinder.hp.attlist,
         (
-         rpg.pathfinder.hp.fasthealing?
+         rpg.pathfinder.hp.hpval
+         & rpg.pathfinder.hp.fasthealing?
          & rpg.pathfinder.hp.regeneration?
-         & (db._text
-            | db.indexing.inlines
-            | db.link.inlines)*
         )
+    }
+
+rpg.pathfinder.defenses.creaturesaves.role.attribute = attribute role { text }
+rpg.pathfinder.defenses.creaturesaves.attlist =
+    rpg.pathfinder.defenses.creaturesaves.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.defenses.creaturesaves =
+    element creaturesaves {
+        rpg.pathfinder.defenses.creaturesaves.attlist,
+        rpg.d20.save,
+        rpg.d20.save, 
+        rpg.d20.save
     }
 
 rpg.pathfinder.defenses.role.attribute = attribute role { text }
@@ -448,7 +488,8 @@ rpg.pathfinder.defenses =
     element defenses {
         rpg.pathfinder.defenses.attlist,
         rpg.d20.ac,
-        rpg.pathfinder.hp
+        rpg.pathfinder.hp,
+        rpg.pathfinder.defenses.creaturesaves 
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -796,6 +837,7 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.creature.inlines
     | rpg.d20.dc
     | rpg.d20.ac
+    | rpg.d20.save
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
@@ -810,6 +852,7 @@ rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype
 rpg.pathfinder.inlines = rpg.d20.inlines 
     | rpg.pathfinder.settlement.inlines
     | rpg.pathfinder.creature.inlines
+    | rpg.pathfinder.hp
 
 rpg.pathfinder.creature.blocks = rpg.pathfinder.creature
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
