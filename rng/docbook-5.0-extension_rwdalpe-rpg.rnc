@@ -1,3 +1,4 @@
+
 # Copyright (C) 2015 Robert Winslow Dalpe
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -311,7 +312,7 @@ rpg.d20.ac.touch.attlist =
     & db.common.linking.attributes
 rpg.d20.ac.touch =
     element touch {
-        rpg.d20.ac.rating.attlist,
+        rpg.d20.ac.touch.attlist,
         (db._text
          | db.indexing.inlines
          | db.link.inlines)+
@@ -361,6 +362,61 @@ rpg.d20.save =
          | db.indexing.inlines
          | db.link.inlines)+,
         rpg.general.qualifier*
+    }
+
+rpg.d20.dr.role.attribute = attribute role { text }
+rpg.d20.dr.amount.attribute = attribute amount { text }
+rpg.d20.dr.attlist =
+    rpg.d20.dr.role.attribute?
+    & rpg.d20.dr.amount.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.dr =
+    element dr {
+        rpg.d20.dr.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.d20.immunity.role.attribute = attribute role { text }
+rpg.d20.immunity.attlist =
+    rpg.d20.immunity.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.immunity =
+    element immunity {
+        rpg.d20.immunity.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.d20.resistance.role.attribute = attribute role { text }
+rpg.d20.resistance.amount.attribute = attribute amount { text }
+rpg.d20.resistance.attlist =
+    rpg.d20.resistance.role.attribute?
+    & rpg.d20.resistance.amount.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.resistance =
+    element resistance {
+        rpg.d20.resistance.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.d20.sr.role.attribute = attribute role { text }
+rpg.d20.sr.amount.attribute = attribute amount { text }
+rpg.d20.sr.attlist =
+    rpg.d20.sr.role.attribute?
+    & rpg.d20.sr.amount.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.sr =
+    element sr {
+        rpg.d20.sr.attlist
     }
 
 rpg.pathfinder.sense.role.attribute = attribute role { text }
@@ -479,6 +535,34 @@ rpg.pathfinder.defenses.creaturesaves =
         rpg.d20.save
     }
 
+rpg.pathfinder.defensiveability.role.attribute = attribute role { text }
+rpg.pathfinder.defensiveability.attlist =
+    rpg.pathfinder.defensiveability.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.defensiveability =
+    element defensiveability {
+        rpg.pathfinder.defensiveability.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.pathfinder.defensiveabilities.role.attribute = attribute role { text }
+rpg.pathfinder.defensiveabilities.attlist =
+    rpg.pathfinder.defensiveabilities.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.defensiveabilities =
+    element defensiveabilities {
+        rpg.pathfinder.defensiveabilities.attlist,
+        rpg.pathfinder.defensiveability*,
+        rpg.d20.dr*,
+        rpg.d20.immunity*,
+        rpg.d20.resistance*,
+        rpg.d20.sr?
+    }
+
 rpg.pathfinder.defenses.role.attribute = attribute role { text }
 rpg.pathfinder.defenses.attlist =
     rpg.pathfinder.defenses.role.attribute?
@@ -489,7 +573,8 @@ rpg.pathfinder.defenses =
         rpg.pathfinder.defenses.attlist,
         rpg.d20.ac,
         rpg.pathfinder.hp,
-        rpg.pathfinder.defenses.creaturesaves 
+        rpg.pathfinder.defenses.creaturesaves,
+        rpg.pathfinder.defensiveabilities?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -838,11 +923,16 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.dc
     | rpg.d20.ac
     | rpg.d20.save
+    | rpg.d20.dr
+    | rpg.d20.immunity
+    | rpg.d20.resistance
+    | rpg.d20.sr
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
 rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
     | rpg.pathfinder.aura
+    | rpg.pathfinder.defensiveability
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
