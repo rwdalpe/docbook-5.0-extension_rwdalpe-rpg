@@ -563,6 +563,30 @@ rpg.pathfinder.defensiveabilities =
         rpg.d20.sr?
     }
 
+rpg.pathfinder.weakness.role.attribute = attribute role { text }
+rpg.pathfinder.weakness.attlist =
+    rpg.pathfinder.weakness.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.weakness =
+    element weakness {
+        rpg.pathfinder.weakness.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.pathfinder.weaknesses.role.attribute = attribute role { text }
+rpg.pathfinder.weaknesses.attlist =
+    rpg.pathfinder.weaknesses.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.weaknesses =
+    element weaknesses {
+        rpg.pathfinder.weaknesses.attlist,
+        rpg.pathfinder.weakness+
+    }
+
 rpg.pathfinder.defenses.role.attribute = attribute role { text }
 rpg.pathfinder.defenses.attlist =
     rpg.pathfinder.defenses.role.attribute?
@@ -574,7 +598,18 @@ rpg.pathfinder.defenses =
         rpg.d20.ac,
         rpg.pathfinder.hp,
         rpg.pathfinder.defenses.creaturesaves,
-        rpg.pathfinder.defensiveabilities?
+        rpg.pathfinder.defensiveabilities?,
+        rpg.pathfinder.weaknesses?
+    }
+
+rpg.pathfinder.offenses.role.attribute = attribute role { text }
+rpg.pathfinder.offenses.attlist =
+    rpg.pathfinder.offenses.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.offenses =
+    element offenses {
+        rpg.pathfinder.offenses.attlist
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -596,7 +631,8 @@ rpg.pathfinder.creature =
         rpg.d20.initiative,
         rpg.pathfinder.senses?,
         rpg.pathfinder.aura*,
-        rpg.pathfinder.defenses
+        rpg.pathfinder.defenses,
+        rpg.pathfinder.offenses
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
@@ -933,6 +969,7 @@ rpg.d20.blocks = rpg.d20.abilityscores
 rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
     | rpg.pathfinder.aura
     | rpg.pathfinder.defensiveability
+    | rpg.pathfinder.weakness
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
