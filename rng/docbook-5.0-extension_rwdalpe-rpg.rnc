@@ -419,6 +419,107 @@ rpg.d20.sr =
         rpg.d20.sr.attlist
     }
 
+rpg.d20.speed.role.attribute = attribute role { text }
+rpg.d20.speed.rate.attribute = attribute rate { text }
+rpg.d20.speed.attlist =
+    rpg.d20.speed.role.attribute?
+    & rpg.d20.speed.rate.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.speed =
+    element speed {
+        rpg.d20.speed.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*,
+        rpg.general.qualifier?
+    }
+
+rpg.d20.creaturespeeds.role.attribute = attribute role { text }
+rpg.d20.creaturespeeds.attlist =
+    rpg.d20.speed.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.creaturespeeds =
+    element creaturespeeds {
+        rpg.d20.creaturespeeds.attlist,
+        rpg.d20.speed*
+    }
+
+rpg.d20.hiteffect.role.attribute = attribute role { text }
+rpg.d20.hiteffect.attlist =
+    rpg.d20.hiteffect.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.hiteffect =
+    element hiteffect {
+        rpg.d20.hiteffect.attlist,
+        (db._text
+         | rpg.general.qualifier
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.d20.damage.role.attribute = attribute role { text }
+rpg.d20.damage.attlist =
+    rpg.d20.damage.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.damage =
+    element damage {
+        rpg.d20.damage.attlist,
+        (db._text
+         | rpg.general.qualifier
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.d20.onhit.role.attribute = attribute role { text }
+rpg.d20.onhit.attlist =
+    rpg.d20.onhit.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.onhit =
+    element onhit {
+        rpg.d20.onhit.attlist,
+        (db._text
+         | rpg.d20.damage
+         | rpg.d20.hiteffect
+         | rpg.general.qualifier
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.d20.attackbonus.role.attribute = attribute role { text }
+rpg.d20.attackbonus.modifier.attribute = attribute modifier { text }
+rpg.d20.attackbonus.attlist =
+    rpg.d20.attackbonus.role.attribute?
+    & rpg.d20.attackbonus.modifier.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.attackbonus =
+    element attackbonus {
+        rpg.d20.attackbonus.attlist,
+        rpg.general.qualifier?
+    }
+
+rpg.d20.attack.role.attribute = attribute role { text }
+rpg.d20.attack.attlist =
+    rpg.d20.attack.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.attack =
+    element attack {
+        rpg.d20.attack.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*,
+        rpg.d20.attackbonus*,
+        rpg.general.qualifier?,
+        rpg.d20.onhit?,
+        rpg.general.qualifier?
+    }
+
 rpg.pathfinder.sense.role.attribute = attribute role { text }
 rpg.pathfinder.sense.range.attribute = attribute range { text }
 rpg.pathfinder.sense.attlist =
@@ -602,6 +703,30 @@ rpg.pathfinder.defenses =
         rpg.pathfinder.weaknesses?
     }
 
+rpg.pathfinder.meleeattacks.role.attribute = attribute role { text }
+rpg.pathfinder.meleeattacks.attlist =
+    rpg.pathfinder.meleeattacks.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.meleeattacks =
+    element meleeattacks {
+        rpg.pathfinder.meleeattacks.attlist,
+        (rpg.d20.attack,
+         db._text?)+
+    }
+
+rpg.pathfinder.rangedattacks.role.attribute = attribute role { text }
+rpg.pathfinder.rangedattacks.attlist =
+    rpg.pathfinder.rangedattacks.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.rangedattacks =
+    element rangedattacks {
+        rpg.pathfinder.rangedattacks.attlist,
+        (rpg.d20.attack,
+         db._text?)+
+    }
+
 rpg.pathfinder.offenses.role.attribute = attribute role { text }
 rpg.pathfinder.offenses.attlist =
     rpg.pathfinder.offenses.role.attribute?
@@ -609,7 +734,10 @@ rpg.pathfinder.offenses.attlist =
     & db.common.linking.attributes
 rpg.pathfinder.offenses =
     element offenses {
-        rpg.pathfinder.offenses.attlist
+        rpg.pathfinder.offenses.attlist,
+        rpg.d20.creaturespeeds?,
+        rpg.pathfinder.meleeattacks?,
+        rpg.pathfinder.rangedattacks?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -963,6 +1091,11 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.immunity
     | rpg.d20.resistance
     | rpg.d20.sr
+    | rpg.d20.speed
+    | rpg.d20.damage
+    | rpg.d20.hiteffect
+    | rpg.d20.attack
+    | rpg.d20.attackbonus
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
