@@ -503,6 +503,19 @@ rpg.d20.attackbonus =
         rpg.general.qualifier?
     }
 
+rpg.d20.attackname.role.attribute = attribute role { text }
+rpg.d20.attackname.attlist =
+    rpg.d20.attackname.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.attackname =
+    element attackname {
+        rpg.d20.attackname.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
 rpg.d20.attack.role.attribute = attribute role { text }
 rpg.d20.attack.attlist =
     rpg.d20.attack.role.attribute?
@@ -511,9 +524,7 @@ rpg.d20.attack.attlist =
 rpg.d20.attack =
     element attack {
         rpg.d20.attack.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)*,
+        rpg.d20.attackname,
         rpg.d20.attackbonus*,
         rpg.general.qualifier?,
         rpg.d20.onhit?,
@@ -727,6 +738,46 @@ rpg.pathfinder.rangedattacks =
          db._text?)+
     }
 
+rpg.pathfinder.space.role.attribute = attribute role { text }
+rpg.pathfinder.space.attlist =
+    rpg.pathfinder.space.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.space =
+    element space {
+        rpg.pathfinder.space.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+,
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.reach.role.attribute = attribute role { text }
+rpg.pathfinder.reach.attlist =
+    rpg.pathfinder.reach.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.reach =
+    element reach {
+        rpg.pathfinder.reach.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+,
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.creaturedimensions.role.attribute = attribute role { text }
+rpg.pathfinder.creaturedimensions.attlist =
+    rpg.pathfinder.creaturedimensions.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.creaturedimensions =
+    element creaturedimensions {
+        rpg.pathfinder.creaturedimensions.attlist,
+        rpg.pathfinder.space?,
+        rpg.pathfinder.reach?
+    }
+
 rpg.pathfinder.offenses.role.attribute = attribute role { text }
 rpg.pathfinder.offenses.attlist =
     rpg.pathfinder.offenses.role.attribute?
@@ -737,7 +788,8 @@ rpg.pathfinder.offenses =
         rpg.pathfinder.offenses.attlist,
         rpg.d20.creaturespeeds?,
         rpg.pathfinder.meleeattacks?,
-        rpg.pathfinder.rangedattacks?
+        rpg.pathfinder.rangedattacks?,
+        rpg.pathfinder.creaturedimensions?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -1103,6 +1155,8 @@ rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
     | rpg.pathfinder.aura
     | rpg.pathfinder.defensiveability
     | rpg.pathfinder.weakness
+    | rpg.pathfinder.space
+    | rpg.pathfinder.reach
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
