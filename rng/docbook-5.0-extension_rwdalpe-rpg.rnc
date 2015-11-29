@@ -815,6 +815,36 @@ rpg.pathfinder.creature =
         rpg.pathfinder.offenses
     }
 
+rpg.pathfinder.abbrevcreaturedesc.role.attribute = attribute role { text }
+rpg.pathfinder.abbrevcreaturedesc.style.attribute = attribute style { text }
+rpg.pathfinder.abbrevcreaturedesc.attlist =
+    rpg.pathfinder.abbrevcreaturedesc.role.attribute?
+    & rpg.pathfinder.abbrevcreaturedesc.style.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.abbrevcreaturedesc =
+    element abbrevcreaturedesc {
+        rpg.pathfinder.abbrevcreaturedesc.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+
+    }
+
+rpg.pathfinder.abbrevcreature.role.attribute = attribute role { text }
+rpg.pathfinder.abbrevcreature.attlist =
+    rpg.pathfinder.abbrevcreature.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.abbrevcreature =
+    element abbrevcreature {
+        rpg.pathfinder.abbrevcreature.attlist,
+        rpg.d20.creaturename,
+        rpg.d20.challengerating,
+        rpg.pathfinder.abbrevcreaturedesc?,
+        rpg.pathfinder.abbrevcreaturedesc?,
+        rpg.pathfinder.hp?
+    }
+
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
 [
   a:documentation [
@@ -1169,6 +1199,7 @@ rpg.pathfinder.inlines = rpg.d20.inlines
     | rpg.pathfinder.hp
 
 rpg.pathfinder.creature.blocks = rpg.pathfinder.creature
+    | rpg.pathfinder.abbrevcreature
 rpg.pathfinder.settlement.blocks = rpg.pathfinder.settlement 
 rpg.pathfinder.blocks = rpg.d20.blocks
     | rpg.pathfinder.creature.blocks
