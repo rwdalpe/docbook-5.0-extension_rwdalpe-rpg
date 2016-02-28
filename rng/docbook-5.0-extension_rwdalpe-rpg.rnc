@@ -80,17 +80,19 @@ rpg.d20.abilityscore.attlist =
     & rpg.d20.abilityscore.modifier.attribute?
     & db.common.attributes
     & db.common.linking.attributes
+
 [
   a:documentation[
     "An ability score from the d20 system, as described at "
-    h:a[ href="http://paizo.com/pathfinderRPG/prd/gettingStarted.html#ability-scores" 
+    h:a[ href="http://paizo.com/pathfinderRPG/prd/gettingStarted.html#ability-scores"
     "http://paizo.com/pathfinderRPG/prd/gettingStarted.html#ability-scores" ]"."
   ]
 ]
+
 rpg.d20.abilityscore =
     element abilityscore {
         rpg.d20.abilityscore.attlist,
-        (db._text 
+        (db._text
          | db.indexing.inlines
          | db.link.inlines)+
     }
@@ -778,6 +780,31 @@ rpg.pathfinder.creaturedimensions =
         rpg.pathfinder.reach?
     }
 
+rpg.pathfinder.specialattack.role.attribute = attribute role { text }
+rpg.pathfinder.specialattack.attlist =
+    rpg.pathfinder.specialattack.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.specialattack =
+    element specialattack {
+        rpg.pathfinder.specialattack.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)+,
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.specialattacks.role.attribute = attribute role { text }
+rpg.pathfinder.specialattacks.attlist =
+    rpg.pathfinder.specialattacks.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.specialattacks =
+    element specialattacks {
+        rpg.pathfinder.specialattacks.attlist,
+        rpg.pathfinder.specialattack*
+    }
+
 rpg.pathfinder.offenses.role.attribute = attribute role { text }
 rpg.pathfinder.offenses.attlist =
     rpg.pathfinder.offenses.role.attribute?
@@ -789,7 +816,8 @@ rpg.pathfinder.offenses =
         rpg.d20.creaturespeeds?,
         rpg.pathfinder.meleeattacks?,
         rpg.pathfinder.rangedattacks?,
-        rpg.pathfinder.creaturedimensions?
+        rpg.pathfinder.creaturedimensions?,
+        rpg.pathfinder.specialattacks?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -951,8 +979,8 @@ rpg.pathfinder.populations.attlist =
 [
   a:documentation[
     "Describes a collection of populations. Described in greater detail at "
-    h:a[ 
-      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#population" 
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#population"
       "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#population"
     ]
     "."
@@ -972,8 +1000,8 @@ rpg.pathfinder.government.attlist =
 [
   a:documentation[
     "A type of government. Described in greater detail at "
-    h:a[ 
-      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#government" 
+    h:a[
+      href="http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#government"
       "http://paizo.com/pathfinderRPG/prd/mastery/settlements.html#government"
     ]
     "."
@@ -1187,6 +1215,7 @@ rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
     | rpg.pathfinder.weakness
     | rpg.pathfinder.space
     | rpg.pathfinder.reach
+    | rpg.pathfinder.specialattack
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
