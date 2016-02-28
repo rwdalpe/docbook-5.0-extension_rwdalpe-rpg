@@ -533,6 +533,51 @@ rpg.d20.attack =
         rpg.general.qualifier?
     }
 
+rpg.d20.casterlevel.role.attribute = attribute role { text }
+rpg.d20.casterlevel.level.attribute = attribute level { text }
+rpg.d20.casterlevel.attlist =
+    rpg.d20.casterlevel.role.attribute?
+    & rpg.d20.casterlevel.level.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.casterlevel =
+    element casterlevel {
+        rpg.d20.casterlevel.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*
+    }
+
+rpg.d20.concentration.role.attribute = attribute role { text }
+rpg.d20.concentration.modifier.attribute = attribute modifier { text }
+rpg.d20.concentration.attlist =
+    rpg.d20.concentration.role.attribute?
+    & rpg.d20.concentration.modifier.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.concentration =
+    element concentration {
+        rpg.d20.concentration.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines)*,
+        rpg.general.qualifier?
+    }
+
+rpg.d20.spell.role.attribute = attribute role { text }
+rpg.d20.spell.attlist =
+    rpg.d20.spell.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.spell =
+    element spell {
+        rpg.d20.spell.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines
+         | rpg.inlines)+
+    }
+
 rpg.pathfinder.sense.role.attribute = attribute role { text }
 rpg.pathfinder.sense.range.attribute = attribute range { text }
 rpg.pathfinder.sense.attlist =
@@ -805,6 +850,76 @@ rpg.pathfinder.specialattacks =
         rpg.pathfinder.specialattack*
     }
 
+rpg.pathfinder.sla.role.attribute = attribute role { text }
+rpg.pathfinder.sla.attlist =
+    rpg.pathfinder.sla.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.sla =
+    element sla {
+        rpg.pathfinder.sla.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines
+         | rpg.inlines)+
+    }
+
+rpg.pathfinder.slatier.role.attribute = attribute role { text }
+rpg.pathfinder.slatier.frequency.attribute = attribute frequency { text }
+rpg.pathfinder.slatier.attlist =
+    rpg.pathfinder.slatier.role.attribute?
+    & rpg.pathfinder.slatier.frequency.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.slatier =
+    element slatier {
+        rpg.pathfinder.slatier.attlist,
+        rpg.pathfinder.sla+
+    }
+
+rpg.pathfinder.slas.role.attribute = attribute role { text }
+rpg.pathfinder.slas.title.attribute = attribute title { text }
+rpg.pathfinder.slas.attlist =
+    rpg.pathfinder.slas.role.attribute?
+    & rpg.pathfinder.slas.title.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.slas =
+    element slas {
+        rpg.pathfinder.slas.attlist,
+        rpg.d20.casterlevel?,
+        rpg.d20.concentration?,
+        rpg.pathfinder.slatier+
+    }
+
+rpg.pathfinder.spelltier.role.attribute = attribute role { text }
+rpg.pathfinder.spelltier.tiername.attribute = attribute tiername { text }
+rpg.pathfinder.spelltier.attlist =
+    rpg.pathfinder.spelltier.role.attribute?
+    & rpg.pathfinder.spelltier.tiername.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.spelltier =
+    element spelltier {
+        rpg.pathfinder.spelltier.attlist,
+        rpg.d20.spell+
+    }
+
+rpg.pathfinder.spellsprepped.role.attribute = attribute role { text }
+rpg.pathfinder.spellsprepped.title.attribute = attribute title { text }
+rpg.pathfinder.spellsprepped.attlist =
+    rpg.pathfinder.spellsprepped.role.attribute?
+    & rpg.pathfinder.spellsprepped.title.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.spellsprepped =
+    element spellsprepped {
+        rpg.pathfinder.spellsprepped.attlist,
+        rpg.d20.casterlevel?,
+        rpg.d20.concentration?,
+        rpg.pathfinder.spelltier+
+    }
+
 rpg.pathfinder.offenses.role.attribute = attribute role { text }
 rpg.pathfinder.offenses.attlist =
     rpg.pathfinder.offenses.role.attribute?
@@ -817,7 +932,9 @@ rpg.pathfinder.offenses =
         rpg.pathfinder.meleeattacks?,
         rpg.pathfinder.rangedattacks?,
         rpg.pathfinder.creaturedimensions?,
-        rpg.pathfinder.specialattacks?
+        rpg.pathfinder.specialattacks?,
+        rpg.pathfinder.slas*,
+        rpg.pathfinder.spellsprepped*
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -1206,6 +1323,9 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.hiteffect
     | rpg.d20.attack
     | rpg.d20.attackbonus
+    | rpg.d20.casterlevel
+    | rpg.d20.concentration
+    | rpg.d20.spell
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
@@ -1216,6 +1336,7 @@ rpg.pathfinder.creature.inlines = rpg.pathfinder.sense
     | rpg.pathfinder.space
     | rpg.pathfinder.reach
     | rpg.pathfinder.specialattack
+    | rpg.pathfinder.sla
 rpg.pathfinder.settlement.inlines = rpg.pathfinder.settlementtype 
     | rpg.pathfinder.settlementquality 
     | rpg.pathfinder.settlementdanger 
