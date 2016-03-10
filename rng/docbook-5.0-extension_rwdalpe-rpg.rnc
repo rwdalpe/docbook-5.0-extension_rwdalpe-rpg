@@ -937,6 +937,17 @@ rpg.pathfinder.offenses =
         rpg.pathfinder.spellsprepped*
     }
 
+rpg.pathfinder.statistics.role.attribute = attribute role { text }
+rpg.pathfinder.statistics.attlist =
+    rpg.pathfinder.statistics.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.statistics =
+    element statistics {
+        rpg.pathfinder.statistics.attlist,
+        rpg.d20.abilityscores
+    }
+
 rpg.pathfinder.creature.role.attribute = attribute role { text }
 rpg.pathfinder.creature.attlist =
     rpg.pathfinder.creature.role.attribute?
@@ -957,7 +968,8 @@ rpg.pathfinder.creature =
         rpg.pathfinder.senses?,
         rpg.pathfinder.aura*,
         rpg.pathfinder.defenses,
-        rpg.pathfinder.offenses
+        rpg.pathfinder.offenses,
+        rpg.pathfinder.statistics
     }
 
 rpg.pathfinder.abbrevcreaturedesc.role.attribute = attribute role { text }
