@@ -615,6 +615,20 @@ rpg.d20.bab =
         rpg.general.qualifier?
     }
 
+rpg.d20.feat.role.attribute = attribute role { text }
+rpg.d20.feat.attlist =
+    rpg.d20.feat.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.feat =
+    element feat {
+        rpg.d20.feat.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines
+         | rpg.inlines)+
+    }
+
 rpg.pathfinder.cmb.role.attribute = attribute role { text }
 rpg.pathfinder.cmb.modifier.attribute = attribute modifier { text }
 rpg.pathfinder.cmb.attlist =
@@ -1023,6 +1037,17 @@ rpg.pathfinder.attackstatistics =
         rpg.pathfinder.cmd?
     }
 
+rpg.pathfinder.creaturefeats.role.attribute = attribute role { text }
+rpg.pathfinder.creaturefeats.attlist =
+    rpg.pathfinder.creaturefeats.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.creaturefeats =
+    element creaturefeats{
+        rpg.pathfinder.creaturefeats.attlist,
+        rpg.d20.feat+
+    }
+
 rpg.pathfinder.statistics.role.attribute = attribute role { text }
 rpg.pathfinder.statistics.attlist =
     rpg.pathfinder.statistics.role.attribute?
@@ -1032,7 +1057,8 @@ rpg.pathfinder.statistics =
     element statistics {
         rpg.pathfinder.statistics.attlist,
         rpg.d20.abilityscores,
-        rpg.pathfinder.attackstatistics
+        rpg.pathfinder.attackstatistics,
+        rpg.pathfinder.creaturefeats?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -1427,6 +1453,7 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.concentration
     | rpg.d20.spell
     | rpg.d20.bab
+    | rpg.d20.feat
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
