@@ -26,6 +26,17 @@ a:documentation [ """When you see a *.role.attribute definition, consider it a
 declaration of a DocBook role attribute for that element, as that is what it
 should be processed as.""" ]
 
+rpg.general.modifierbreakdown.role.attribute = attribute role { text }
+rpg.general.modifierbreakdown.attlist =
+    rpg.general.modifierbreakdown.role.attribute ?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.general.modifierbreakdown =
+    element modifierbreakdown {
+        rpg.general.modifierbreakdown.attlist,
+        rpg.general.modifier+
+    }
+
 rpg.general.modifier.role.attribute = attribute role { text }
 rpg.general.modifier.value.attribute = attribute value { text }
 rpg.general.modifier.attlist =
@@ -52,7 +63,8 @@ rpg.general.qualifier =
         rpg.general.qualifier.attlist,
         (db._text 
          | db.indexing.inlines
-         | db.link.inlines)+
+         | db.link.inlines
+         | rpg.inlines)+
     }
 
 rpg.general.location.role.attribute = attribute role { text }
@@ -92,9 +104,11 @@ rpg.d20.abilityscore.attlist =
 rpg.d20.abilityscore =
     element abilityscore {
         rpg.d20.abilityscore.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)+
+        ( rpg.general.modifierbreakdown?
+          & (db._text
+             | db.indexing.inlines
+             | db.link.inlines)+
+        )
     }
 
 rpg.d20.abilityscores.role.attribute = attribute role { text }
@@ -258,9 +272,11 @@ rpg.d20.initiative.attlist =
 rpg.d20.initiative =
     element initiative {
         rpg.d20.initiative.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)*
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        )
     }
 
 rpg.d20.skill.role.attribute = attribute role { text }
@@ -273,9 +289,11 @@ rpg.d20.skill.attlist =
 rpg.d20.skill =
     element skill {
         rpg.d20.skill.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)*,
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        ),
         rpg.general.qualifier?
     }
 
@@ -347,7 +365,7 @@ rpg.d20.ac =
         (db._text
          | db.indexing.inlines
          | db.link.inlines)*,
-        rpg.general.modifier*
+        rpg.general.modifierbreakdown?
     }
 
 rpg.d20.save.role.attribute = attribute role { text }
@@ -360,9 +378,11 @@ rpg.d20.save.attlist =
 rpg.d20.save =
     element save {
         rpg.d20.save.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)+,
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)+
+        ),
         rpg.general.qualifier*
     }
 
@@ -502,6 +522,7 @@ rpg.d20.attackbonus.attlist =
 rpg.d20.attackbonus =
     element attackbonus {
         rpg.d20.attackbonus.attlist,
+        rpg.general.modifierbreakdown?,
         rpg.general.qualifier?
     }
 
@@ -558,9 +579,11 @@ rpg.d20.concentration.attlist =
 rpg.d20.concentration =
     element concentration {
         rpg.d20.concentration.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)*,
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        ),
         rpg.general.qualifier?
     }
 
@@ -576,6 +599,56 @@ rpg.d20.spell =
          | db.indexing.inlines
          | db.link.inlines
          | rpg.inlines)+
+    }
+
+rpg.d20.bab.role.attribute = attribute role { text }
+rpg.d20.bab.modifier.attribute = attribute modifier { text }
+rpg.d20.bab.attlist =
+    rpg.d20.bab.role.attribute?
+    & rpg.d20.bab.modifier.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.bab =
+    element bab {
+        rpg.d20.bab.attlist,
+        rpg.general.modifierbreakdown?,
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.cmb.role.attribute = attribute role { text }
+rpg.pathfinder.cmb.modifier.attribute = attribute modifier { text }
+rpg.pathfinder.cmb.attlist =
+    rpg.pathfinder.cmb.role.attribute?
+    & rpg.pathfinder.cmb.modifier.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.cmb =
+    element cmb {
+        rpg.pathfinder.cmb.attlist,
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        ),
+        rpg.general.qualifier?
+    }
+
+rpg.pathfinder.cmd.role.attribute = attribute role { text }
+rpg.pathfinder.cmd.modifier.attribute = attribute modifier { text }
+rpg.pathfinder.cmd.attlist =
+    rpg.pathfinder.cmd.role.attribute?
+    & rpg.pathfinder.cmd.modifier.attribute
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.cmd =
+    element cmd {
+        rpg.pathfinder.cmd.attlist,
+        (rpg.general.modifierbreakdown?
+         & (db._text
+            | db.indexing.inlines
+            | db.link.inlines)*
+        ),
+        rpg.general.qualifier?
     }
 
 rpg.pathfinder.sense.role.attribute = attribute role { text }
@@ -937,6 +1010,19 @@ rpg.pathfinder.offenses =
         rpg.pathfinder.spellsprepped*
     }
 
+rpg.pathfinder.attackstatistics.role.attribute = attribute role { text }
+rpg.pathfinder.attackstatistics.attlist =
+    rpg.pathfinder.attackstatistics.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.attackstatistics =
+    element attackstatistics{
+        rpg.pathfinder.attackstatistics.attlist,
+        rpg.d20.bab,
+        rpg.pathfinder.cmb?,
+        rpg.pathfinder.cmd?
+    }
+
 rpg.pathfinder.statistics.role.attribute = attribute role { text }
 rpg.pathfinder.statistics.attlist =
     rpg.pathfinder.statistics.role.attribute?
@@ -945,7 +1031,8 @@ rpg.pathfinder.statistics.attlist =
 rpg.pathfinder.statistics =
     element statistics {
         rpg.pathfinder.statistics.attlist,
-        rpg.d20.abilityscores
+        rpg.d20.abilityscores,
+        rpg.pathfinder.attackstatistics
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -1310,6 +1397,7 @@ rpg.pathfinder.settlement =
 
 rpg.general.inlines = rpg.general.location
     | rpg.general.modifier
+    | rpg.general.modifierbreakdown
 
 rpg.d20.creature.inlines = rpg.d20.challengerating
     | rpg.d20.xpreward
@@ -1338,6 +1426,7 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.casterlevel
     | rpg.d20.concentration
     | rpg.d20.spell
+    | rpg.d20.bab
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
@@ -1359,6 +1448,8 @@ rpg.pathfinder.inlines = rpg.d20.inlines
     | rpg.pathfinder.settlement.inlines
     | rpg.pathfinder.creature.inlines
     | rpg.pathfinder.hp
+    | rpg.pathfinder.cmb
+    | rpg.pathfinder.cmd
 
 rpg.pathfinder.creature.blocks = rpg.pathfinder.creature
     | rpg.pathfinder.abbrevcreature
