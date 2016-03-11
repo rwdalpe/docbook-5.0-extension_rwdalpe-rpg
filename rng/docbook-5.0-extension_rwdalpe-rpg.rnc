@@ -1048,6 +1048,17 @@ rpg.pathfinder.creaturefeats =
         rpg.d20.feat+
     }
 
+rpg.pathfinder.creatureskills.role.attribute = attribute role { text }
+rpg.pathfinder.creatureskills.attlist =
+    rpg.pathfinder.creatureskills.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.creatureskills =
+    element creatureskills{
+        rpg.pathfinder.creatureskills.attlist,
+        rpg.d20.skill+
+    }
+
 rpg.pathfinder.statistics.role.attribute = attribute role { text }
 rpg.pathfinder.statistics.attlist =
     rpg.pathfinder.statistics.role.attribute?
@@ -1058,7 +1069,8 @@ rpg.pathfinder.statistics =
         rpg.pathfinder.statistics.attlist,
         rpg.d20.abilityscores,
         rpg.pathfinder.attackstatistics,
-        rpg.pathfinder.creaturefeats?
+        rpg.pathfinder.creaturefeats?,
+        rpg.pathfinder.creatureskills?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
