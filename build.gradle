@@ -1,110 +1,127 @@
-project.version="0.0.9"
+/*
+	Copyright (C) 2016 Robert Winslow Dalpe
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
+
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>
+ */
+
+project.version = "0.0.9"
 
 buildscript {
-  repositories {
-    mavenCentral()
-  }
-  
-  dependencies {
-    classpath 'commons-io:commons-io:2.4'
-  }
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'commons-io:commons-io:2.4'
+	}
 }
 
 configurations {
-  build
+	build
 }
 
 repositories {
-  mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-  build 'net.sf.saxon:Saxon-HE:9.6.0-7'
+	build 'net.sf.saxon:Saxon-HE:9.6.0-7'
 }
 
 task clean(type: Delete) {
-  doFirst{
-    delete outputDir
-  }
+	doFirst {
+		delete outputDir
+	}
 }
 
 task cleanLibs(type: Delete) {
-  doFirst {
-    delete "${lib}/gradle", "${lib}/${libTrang}", "${lib}/${libTrangZip}"
-  }
+	doFirst {
+		delete "${lib}/gradle", "${lib}/${libTrang}", "${lib}/${libTrangZip}"
+	}
 }
 
 task copyLibs(type: Sync) {
-  from configurations.build
-  into "${lib}/gradle"
+	from configurations.build
+	into "${lib}/gradle"
 }
 
 task getLibs(dependsOn: copyLibs) {
-  def libdir = new File(lib)
-  
-  if(!libdir.exists()) {
-    libdir.mkdir()
-  }
-  
-  doFirst {
-    ant.get(dest: "${lib}", src: "${libTrangUrl}", skipexisting: true)
-    ant.unzip(dest: "${lib}", src: "${lib}/${libTrangZip}", overwrite: false)
-    //ant.get(dest: "rng/", src: "${libDocbookRncUrl}", skipexisting: true)
-  }
+	def libdir = new File(lib)
+
+	if (!libdir.exists()) {
+		libdir.mkdir()
+	}
+
+	doFirst {
+		ant.get(dest: "${lib}", src: "${libTrangUrl}", skipexisting: true)
+		ant.unzip(dest: "${lib}", src: "${lib}/${libTrangZip}", overwrite: false)
+		//ant.get(dest: "rng/", src: "${libDocbookRncUrl}", skipexisting: true)
+	}
 }
 
 task copyForBuild(type: Sync) {
-  def outputdir = new File(outputDir)
-  if(!outputdir.exists()) {
-    outputdir.mkdir()
-  }
+	def outputdir = new File(outputDir)
+	if (!outputdir.exists()) {
+		outputdir.mkdir()
+	}
 
-  from "./"
-  into outputDir
-  include "rng/**"
-  include "README.*"
-  include "*.txt"
+	from "./"
+	into outputDir
+	include "rng/**"
+	include "README.*"
+	include "*.txt"
 }
 
-task build(type: JavaExec, dependsOn: ['getLibs','copyForBuild']) {
-    
-  doFirst {
-    def jars = fileTree(lib).include(["${libTrang}/*.jar"])
-    
-    main = 'com.thaiopensource.relaxng.translate.Driver'
-    classpath = jars
-    args = "-I rnc -O rng ${outputDir}/rng/${projectName}.rnc ${outputDir}/rng/${projectName}.rng".split().toList()
-  }
+task build(type: JavaExec, dependsOn: ['getLibs', 'copyForBuild']) {
+
+	doFirst {
+		def jars = fileTree(lib).include(["${libTrang}/*.jar"])
+
+		main = 'com.thaiopensource.relaxng.translate.Driver'
+		classpath = jars
+		args = "-I rnc -O rng ${outputDir}/rng/${projectName}.rnc ${outputDir}/rng/${projectName}.rng".split().toList()
+	}
 }
 
 task docs(dependsOn: build) {
-  doFirst {
-    def outputdir = new File("${outputDir}/${docsDir}")
-    if(!outputdir.exists()) {
-      outputdir.mkdir()
-    }
-  
-    def jars = fileTree(lib).include(["gradle/*.jar"])
-    def forTransform = fileTree("${outputDir}/rng").include("*.rng").exclude("docbookxi*").getFiles()
-  
-    for (transform in forTransform) {
-      def baseFileName = org.apache.commons.io.FilenameUtils.getBaseName(transform.toString())
-      
-      javaexec {
-        main = 'net.sf.saxon.Transform'
-        classpath = jars
-        args = "-xsl:${lib}/build-docs.xsl -s:${transform} -o:${outputdir}/${baseFileName}.html version=${project.version}".split().toList()
-      }
-    }
-  }
+	doFirst {
+		def outputdir = new File("${outputDir}/${docsDir}")
+		if (!outputdir.exists()) {
+			outputdir.mkdir()
+		}
+
+		def jars = fileTree(lib).include(["gradle/*.jar"])
+		def forTransform = fileTree("${outputDir}/rng").include("*.rng").exclude("docbookxi*").getFiles()
+
+		for (transform in forTransform) {
+			def baseFileName = org.apache.commons.io.FilenameUtils.getBaseName(transform.toString())
+
+			javaexec {
+				main = 'net.sf.saxon.Transform'
+				classpath = jars
+				args = "-xsl:${lib}/build-docs.xsl -s:${transform} -o:${outputdir}/${baseFileName}.html version=${project.version}".split().toList()
+			}
+		}
+	}
 }
 
 task zip(type: Zip, dependsOn: docs) {
-  archiveName = "${projectName}_${project.version}.zip"
-  destinationDir = new File(outputDir)
-  from outputDir
-  include "**/*"
-  exclude "*.zip"
+	archiveName = "${projectName}_${project.version}.zip"
+	destinationDir = new File(outputDir)
+	from outputDir
+	include "**/*"
+	exclude "*.zip"
 }
 
-task dist(dependsOn: ['clean', 'zip']) << { }
+task dist(dependsOn: ['clean', 'zip']) << {}
