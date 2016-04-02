@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-project.version = "0.0.9"
+project.version = "0.0.10"
 
 buildscript {
 	repositories {
