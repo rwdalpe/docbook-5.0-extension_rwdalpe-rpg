@@ -26,6 +26,19 @@ a:documentation [ """When you see a *.role.attribute definition, consider it a
 declaration of a DocBook role attribute for that element, as that is what it
 should be processed as.""" ]
 
+rpg.general.statblocksection.role.attribute = attribute role { text }
+rpg.general.statblocksection.attlist =
+    rpg.general.statblocksection.role.attribute ?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.general.statblocksection =
+    element statblocksection {
+        rpg.general.statblocksection.attlist,
+        db.title?,
+        (db.all.inlines
+         | db.all.blocks)*
+    }
+
 rpg.general.modifierbreakdown.role.attribute = attribute role { text }
 rpg.general.modifierbreakdown.attlist =
     rpg.general.modifierbreakdown.role.attribute ?
@@ -1092,24 +1105,13 @@ rpg.pathfinder.creature =
         rpg.d20.initiative,
         rpg.pathfinder.senses?,
         rpg.pathfinder.aura*,
-        rpg.pathfinder.defenses,
-        rpg.pathfinder.offenses,
-        rpg.pathfinder.statistics
-    }
-
-rpg.pathfinder.abbrevcreaturedesc.role.attribute = attribute role { text }
-rpg.pathfinder.abbrevcreaturedesc.style.attribute = attribute style { text }
-rpg.pathfinder.abbrevcreaturedesc.attlist =
-    rpg.pathfinder.abbrevcreaturedesc.role.attribute?
-    & rpg.pathfinder.abbrevcreaturedesc.style.attribute?
-    & db.common.attributes
-    & db.common.linking.attributes
-rpg.pathfinder.abbrevcreaturedesc =
-    element abbrevcreaturedesc {
-        rpg.pathfinder.abbrevcreaturedesc.attlist,
-        (db._text
-         | db.indexing.inlines
-         | db.link.inlines)+
+        rpg.general.statblocksection*,
+        rpg.pathfinder.defenses?,
+        rpg.general.statblocksection*,
+        rpg.pathfinder.offenses?,
+        rpg.general.statblocksection*,
+        rpg.pathfinder.statistics?,
+        rpg.general.statblocksection*
     }
 
 rpg.pathfinder.abbrevcreature.role.attribute = attribute role { text }
@@ -1122,9 +1124,8 @@ rpg.pathfinder.abbrevcreature =
         rpg.pathfinder.abbrevcreature.attlist,
         rpg.d20.creaturename,
         rpg.d20.challengerating,
-        rpg.pathfinder.abbrevcreaturedesc?,
-        rpg.pathfinder.abbrevcreaturedesc?,
-        rpg.pathfinder.hp?
+        rpg.d20.xpreward?,
+        rpg.general.statblocksection*
     }
 
 rpg.pathfinder.marketplace.role.attribute = attribute role { text }
