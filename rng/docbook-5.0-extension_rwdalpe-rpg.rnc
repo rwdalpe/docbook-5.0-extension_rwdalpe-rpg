@@ -642,6 +642,34 @@ rpg.d20.feat =
          | rpg.inlines)+
     }
 
+rpg.d20.language.role.attribute = attribute role { text }
+rpg.d20.language.attlist =
+    rpg.d20.language.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.language =
+    element language {
+        rpg.d20.language.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines
+         | rpg.inlines)+
+    }
+
+rpg.d20.sq.role.attribute = attribute role { text }
+rpg.d20.sq.attlist =
+    rpg.d20.sq.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.d20.sq =
+    element sq {
+        rpg.d20.sq.attlist,
+        (db._text
+         | db.indexing.inlines
+         | db.link.inlines
+         | rpg.inlines)+
+    }
+
 rpg.pathfinder.cmb.role.attribute = attribute role { text }
 rpg.pathfinder.cmb.modifier.attribute = attribute modifier { text }
 rpg.pathfinder.cmb.attlist =
@@ -1072,6 +1100,28 @@ rpg.pathfinder.creatureskills =
         rpg.d20.skill+
     }
 
+rpg.pathfinder.creaturelanguages.role.attribute = attribute role { text }
+rpg.pathfinder.creaturelanguages.attlist =
+    rpg.pathfinder.creaturelanguages.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.creaturelanguages =
+    element creaturelanguages{
+        rpg.pathfinder.creaturelanguages.attlist,
+        rpg.d20.language+
+    }
+
+rpg.pathfinder.specialqualities.role.attribute = attribute role { text }
+rpg.pathfinder.specialqualities.attlist =
+    rpg.pathfinder.specialqualities.role.attribute?
+    & db.common.attributes
+    & db.common.linking.attributes
+rpg.pathfinder.specialqualities =
+    element specialqualities{
+        rpg.pathfinder.specialqualities.attlist,
+        rpg.d20.sq+
+    }
+
 rpg.pathfinder.statistics.role.attribute = attribute role { text }
 rpg.pathfinder.statistics.attlist =
     rpg.pathfinder.statistics.role.attribute?
@@ -1083,7 +1133,9 @@ rpg.pathfinder.statistics =
         rpg.d20.abilityscores,
         rpg.pathfinder.attackstatistics,
         rpg.pathfinder.creaturefeats?,
-        rpg.pathfinder.creatureskills?
+        rpg.pathfinder.creatureskills?,
+        rpg.pathfinder.creaturelanguages?,
+        rpg.pathfinder.specialqualities?
     }
 
 rpg.pathfinder.creature.role.attribute = attribute role { text }
@@ -1467,6 +1519,8 @@ rpg.d20.inlines = rpg.d20.alignment
     | rpg.d20.spell
     | rpg.d20.bab
     | rpg.d20.feat
+    | rpg.d20.language
+    | rpg.d20.sq
 
 rpg.d20.blocks = rpg.d20.abilityscores
 
